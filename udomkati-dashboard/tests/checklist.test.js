@@ -1,0 +1,35 @@
+const {JSDOM,VirtualConsole}=require('jsdom');const fs=require('fs');
+const html=fs.readFileSync(require('path').join(__dirname,'..','index.html'),'utf8').replace(/<link[^>]*>/g,'');
+const errs=[],res=[];const ok=(n,c,x)=>res.push((c?'PASS ':'FAIL ')+n+(c?'':' -> '+x));
+const store=new Map(),ls=[];const notify=()=>{const docs=[...store].map(([id,v])=>({id,data:()=>v}));ls.forEach(f=>f({docs,empty:!docs.length}))};
+const db={collection:()=>({onSnapshot:(f)=>{ls.push(f);setTimeout(()=>f({docs:[...store].map(([id,v])=>({id,data:()=>v})),empty:!store.size}),0)}}),doc:p=>({set:async d=>{store.set(p.split('/')[1],d);setTimeout(notify,0)},delete:async()=>{}})};
+const user={id:async()=>'u1',me:async()=>({id:'u1',name:'M',canEdit:true,isOwner:true}),can:async()=>true,profiles:async()=>({})};
+const vc=new VirtualConsole();vc.on('jsdomError',e=>errs.push(e.message));
+const dom=new JSDOM(html,{runScripts:'dangerously',pretendToBeVisual:true,virtualConsole:vc,url:'https://x.test/',beforeParse(w){w.claude={use:async n=>({db,user,sample:{json:async()=>({})},downloads:{save:async()=>{}}}[n]||null)};w.addEventListener('error',e=>errs.push(e.message));w.document.fonts={load:async()=>{}}}});
+const w=dom.window,d=w.document,ev=c=>w.eval(c),sleep=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{await sleep(300);
+ const n0=d.querySelectorAll('#oL [data-xd]').length;ok('base items have delete',n0===6,n0);
+ d.querySelector('#oL input[type=checkbox]').click();await sleep(10);
+ d.querySelector('#oL [data-xd]').click();await sleep(10);
+ ok('base item deleted',d.querySelectorAll('#oL [data-xd]').length===5&&ev('C.hi["10"].length')===1,'');
+ ev("$('oIN').value='Custom A'");d.getElementById('oIB').click();ev("$('oIN').value='Custom B'");d.getElementById('oIB').click();
+ ok('custom added',ev('C.ox["10"].length')===2,'');
+ const cb=[...d.querySelectorAll('#oL input[type=checkbox]')];cb[cb.length-1].click();await sleep(10);
+ const dels=[...d.querySelectorAll('#oL [data-xd]')];dels[dels.length-2].click();await sleep(10);
+ ok('custom deleted & done remapped',ev('C.ox["10"].length')===1&&ev('S.od.has("10-c0")'),ev('JSON.stringify([...S.od])'));
+ ok('check doc saved with hi',JSON.parse(store.get('check').j).hi['10'].length===1,'');
+ d.getElementById('oSD').click();ok('first click only asks',ev('C.hs.length')===0,'');
+ d.getElementById('oSD').click();await sleep(10);
+ ok('set deleted (base)',ev('C.hs.includes("10")')&&!d.querySelector('#oT [data-v="10"]'),'');
+ ok('moved to next set',ev('S.os')==='11','');
+ ok('restore button shown',!!d.getElementById('oRS'),'');
+ d.getElementById('oRS').click();await sleep(10);
+ ok('restored',ev('C.hs.length')===0&&d.querySelectorAll('#oT [data-v]').length===3&&!!d.querySelector('#oT [data-v="10"]'),'');
+ // delete all sets then empty state
+ for(let i=0;i<3;i++){d.getElementById('oSD').click();d.getElementById('oSD').click()}
+ await sleep(10);ok('empty state ok',!!d.querySelector('#oL .empty')&&!d.getElementById('oSD'),d.getElementById('oL').innerHTML.slice(0,120));
+ ev("$('oSN').value='New Set'");d.getElementById('oSB').click();ok('add set after empty',ev('C.xs.length')===1,'');
+ d.getElementById('oSD').click();d.getElementById('oSD').click();ok('delete custom set',ev('C.xs.length')===0,'');
+ ev("ME.host=false;ME.role='viewer'");d.getElementById('oRS').click();await sleep(10);ok('viewer cannot restore',ev('C.hs.length')===3,ev('C.hs.length'));
+ ok('no errors',!errs.length,errs.join('|'));
+ console.log(res.join('\n'));process.exit(0)})().catch(e=>{console.log(res.join('\n'));console.log('CRASH',e.stack);process.exit(1)});
