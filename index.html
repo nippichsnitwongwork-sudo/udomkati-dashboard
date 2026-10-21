@@ -127,6 +127,8 @@ nav.nv{position:sticky;top:0;z-index:30;background:var(--bg);padding:8px 0;margi
 nav.nv .chip{white-space:nowrap;flex:none}
 .nb{display:inline-block;min-width:18px;padding:0 5px;margin-left:6px;border-radius:9px;background:var(--bad);color:#fff;font-size:11px;font-weight:700;text-align:center}
 .nb[hidden]{display:none}
+#mtT td:first-child,#mtT th:first-child{position:sticky;left:0;background:var(--card);z-index:1}
+#mtBar .filters{margin:10px 0 8px}
 </style>
 </head>
 <body>
@@ -332,7 +334,7 @@ nav.nv .chip{white-space:nowrap;flex:none}
     <div id="csvSummary" style="margin-top:10px"></div>
   </div>
 
-  <label class="note" style="display:block;margin:10px 0 6px"><input type="checkbox" class="keep" id="mtAll"> แสดงทุกโพสต์ (ค่าเริ่มต้นแสดงเฉพาะที่ถึงวันลงแล้ว)</label>
+  <div id="mtBar"></div>
   <div class="scroll"><table id="mtT"></table></div>
   <textarea id="mtP" rows="4" style="margin-top:10px" placeholder="ข้อมูลจากไฟล์ CSV จะแสดงที่นี่อัตโนมัติ หรือวางข้อมูลเพิ่มเติมเพื่อให้ AI ช่วยวิเคราะห์..." aria-label="ข้อมูลที่ส่งออก"></textarea>
   <div class="addrow"><button type="button" class="btn" id="mtB">✨ Analyze results &amp; recommend adjustments (วิเคราะห์ด้วย AI)</button><span class="note" id="mtS" role="status"></span></div>
@@ -660,7 +662,7 @@ function ensureDefaultTeam(){
   });
 }
 
-function snap(){return {plan:{posts:P.map(x=>({n:x.n,t:x.t,h:x.h,m:x.m,g:x.g,f:x.f,p:x.p,iso:x.iso,o:x.o||'',s:x.s||0,k:x.k||'',pj:x.pj||'',url:x.url||''}))},tasks:{x:TK},items:{cu:C.cu.map(c=>{const r={...c};delete r.busy;return r}),ev:EV},check:{ox:C.ox,xs:C.xs,od:[...S.od],hs:C.hs,hi:C.hi},done:{dn:[...S.done],td:[...S.td]},team:{m:C.tm},metrics:{m:C.met},projects:{m:C.pj}}}
+function snap(){return {plan:{posts:P.map(x=>({n:x.n,t:x.t,h:x.h,m:x.m,g:x.g,f:x.f,p:x.p,iso:x.iso,o:x.o||'',s:x.s||0,k:x.k||'',pj:x.pj||'',url:x.url||'',ik:x.ik||''}))},tasks:{x:TK},items:{cu:C.cu.map(c=>{const r={...c};delete r.busy;return r}),ev:EV},check:{ox:C.ox,xs:C.xs,od:[...S.od],hs:C.hs,hi:C.hi},done:{dn:[...S.done],td:[...S.td]},team:{m:C.tm},metrics:{m:C.met},projects:{m:C.pj}}}
 function apply(k,j){
   if(!j)return;
   if(k==='plan'){if(j.posts){P.length=0;j.posts.forEach(x=>{P.push(x);setP(x,x.iso||null)})}}
@@ -1076,13 +1078,33 @@ function tm(){
 }
 
 const MF=[['rc','Reach (เพียว)'],['vw','Views (เพียว)'],['en','Engagement (เพียว)'],['ss','Share+Save'],['dm','ทักแชท (ลูกปลา)'],['rg','ยอดสมัคร (ลูกปลา)'],['cp','ดูจนจบ %']];
-function mrows(){const t=tdy(),all=$('mtAll')&&$('mtAll').checked;
-  return P.map(x=>({k:x.n,t:x.t,iso:x.iso,f:x.f,p:x.p,m:x.m,o:x.o,url:x.url||''})).concat(C.cu.filter(c=>c.type==='p').map(c=>({k:c.id,t:c.t,iso:c.d,f:c.f,p:c.p||[],m:'',o:c.o,url:c.url||''}))).filter(r=>all||(r.iso&&r.iso<=t))}
-function mt(){const R=mrows(),m0=r=>C.met[r.k]||{};
+S.mp=0;S.mq='';S.mf='due';var MPS=20;
+function mrows(){return P.map(x=>({k:x.n,t:x.t,iso:x.iso,f:x.f,p:x.p,m:x.m,o:x.o,url:x.url||''})).concat(C.cu.filter(c=>c.type==='p').map(c=>({k:c.id,t:c.t,iso:c.d,f:c.f,p:c.p||[],m:'',o:c.o,url:c.url||''}))).sort((a,b)=>(b.iso||'').localeCompare(a.iso||'')||(typeof a.k==='number'&&typeof b.k==='number'?b.k-a.k:0))}
+const hasM=k=>{const m=C.met[k];return !!m&&!!(m.rc||m.vw||m.en||m.dm||m.rg)};
+function mfilt(){const t=tdy(),q=(S.mq||'').toLowerCase();
+  return mrows().filter(r=>(S.mf==='all'||(r.iso&&r.iso<=t&&(S.mf==='due'||(S.mf==='missing'&&!hasM(r.k))||(S.mf==='nolink'&&!r.url))))&&(!q||un(r.t).toLowerCase().includes(q)))}
+function mt(){
+  const bar=$('mtBar');
+  if(bar&&!$('mtQ')){
+    bar.innerHTML='<div class="filters"><input type="search" class="keep" id="mtQ" placeholder="ค้นหาชื่อโพสต์" aria-label="ค้นหาโพสต์"><select class="keep" id="mtF" aria-label="ตัวกรอง"><option value="due">ลงแล้ว (ถึงวันลงแล้ว)</option><option value="missing">ลงแล้ว · ยังไม่กรอกผล</option><option value="nolink">ลงแล้ว · ยังไม่มีลิงก์</option><option value="all">ทุกโพสต์ (รวมที่ยังไม่ถึงวัน)</option></select><div class="fg"><button type="button" class="btn keep" id="mtPv">‹ ก่อนหน้า</button><b id="mtPg"></b><button type="button" class="btn keep" id="mtNx">ถัดไป ›</button></div></div><div class="note" id="mtI"></div>';
+    $('mtF').value=S.mf;
+    $('mtQ').oninput=e=>{S.mq=e.target.value.trim();S.mp=0;mt()};
+    $('mtF').onchange=e=>{S.mf=e.target.value;S.mp=0;mt()};
+    $('mtPv').onclick=()=>{S.mp--;mt()};$('mtNx').onclick=()=>{S.mp++;mt()};
+  }
+  const F=mfilt(),n=F.length,pages=Math.max(1,Math.ceil(n/MPS));S.mp=Math.min(Math.max(0,S.mp),pages-1);
+  const R=F.slice(S.mp*MPS,S.mp*MPS+MPS),m0=r=>C.met[r.k]||{};
+  if($('mtPg')){
+    const due=mrows().filter(r=>r.iso&&r.iso<=tdy()),fl=due.filter(r=>hasM(r.k)).length;
+    $('mtPg').textContent=(S.mp+1)+' / '+pages;$('mtPv').disabled=S.mp===0;$('mtNx').disabled=S.mp>=pages-1;
+    $('mtI').textContent=n?`แสดง ${S.mp*MPS+1}-${S.mp*MPS+R.length} จาก ${n} โพสต์ (หน้าละ ${MPS}) · กรอกผลแล้ว ${fl}/${due.length} โพสต์ที่ลงแล้ว · เรียงใหม่สุดก่อน · กด Enter เพื่อไปช่องถัดลงมา`:'';
+  }
   $('mtT').innerHTML=R.length?'<tr><th>โพสต์</th><th>🔗 ลิงก์โพสต์จริง (ลูกปลา)</th>'+MF.map(f=>`<th>${f[1]}</th>`).join('')+'<th>ER</th><th>S+S</th></tr>'+R.map(r=>{const m=m0(r);return `<tr>
     <td style="white-space:normal;min-width:170px"><b>${typeof r.k==='number'?'#'+r.k:'ใหม่'}</b> ${esc(r.t)} ${r.iso?`<div class="note">${thd(r.iso)}</div>`:''}</td>
     <td><div style="display:flex;gap:4px;align-items:center"><input type="url" data-purl="${r.k}" value="${esc(r.url||'')}" placeholder="วางลิงก์..." aria-label="ลิงก์โพสต์">${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener" class="btn keep" style="padding:2px 6px;font-size:12px" title="เปิดดูโพสต์">↗</a>`:''}</div></td>`
-    +MF.map(f=>`<td><input type="number" min="0" data-m="${r.k}" data-f="${f[0]}" value="${m[f[0]]===undefined?'':m[f[0]]}" aria-label="${f[1]}"></td>`).join('')+`<td id="er-${r.k}">${rate(m.en,m.rc)}</td><td id="ss-${r.k}">${rate(m.ss,m.rc)}</td></tr>`}).join(''):'<tr><td class="note">ยังไม่มีโพสต์ที่ถึงวันลง ติ๊ก "แสดงทุกโพสต์" เพื่อกรอกล่วงหน้า หรืออัปโหลดไฟล์ CSV ด้านบน</td></tr>'}
+    +MF.map(f=>`<td><input type="number" min="0" data-m="${r.k}" data-f="${f[0]}" value="${m[f[0]]===undefined?'':m[f[0]]}" aria-label="${f[1]}"></td>`).join('')+`<td id="er-${r.k}">${rate(m.en,m.rc)}</td><td id="ss-${r.k}">${rate(m.ss,m.rc)}</td></tr>`}).join(''):'<tr><td class="note">ไม่มีโพสต์ตามตัวกรองนี้ ลองเปลี่ยนตัวกรอง หรืออัปโหลดไฟล์ CSV ด้านบน</td></tr>'}
+document.addEventListener('keydown',e=>{const x=e.target;if(e.key!=='Enter'||!x.matches||!x.matches('#mtT input[type=number]'))return;e.preventDefault();
+  const all=[...document.querySelectorAll('#mtT input[data-f="'+x.dataset.f+'"]')],nx=all[all.indexOf(x)+1];x.blur();if(nx){nx.focus();nx.select()}});
 function mu(k){const m=C.met[k]||{},a=$('er-'+k),b=$('ss-'+k);if(a)a.textContent=rate(m.en,m.rc);if(b)b.textContent=rate(m.ss,m.rc)}
 function mtShow(){const r=MR||{},pb=r.by_persona||{};
   $('mtR').innerHTML=`<div style="margin-top:10px"><b>สรุปผลลัพธ์จากตารางและไฟล์ CSV:</b> ${e2(r.summary)}</div><div><b>สิ่งที่ทำได้ดี (Wins):</b>${ul2(r.wins)}</div><div><b>จุดที่ควรปรับปรุง (Issues):</b>${ul2(r.issues)}</div><div><b>แยกตาม Persona:</b>${['A','B','C'].map(k=>`<div>Persona ${k}: ${e2(pb[k])}</div>`).join('')}</div><div><b>คำแนะนำปรับแอดและคอนเทนต์ (สำหรับเพียว/ลูกตาล):</b>${Array.isArray(r.adjustments)&&r.adjustments.length?'<ul style="margin:4px 0">'+r.adjustments.map(a=>`<li>${e2(a.action)} <span class="note">(${e2(a.reason)}${a.when?' · '+e2(a.when):''})</span></li>`).join('')+'</ul>':'<span class="note"> ไม่มี</span>'}</div><div><b>โพสต์ที่แนะนำให้ทำเพิ่ม:</b>${Array.isArray(r.next_posts)&&r.next_posts.length?r.next_posts.map((n,i)=>`<div class="task"><span class="tx">${e2(n.title)} <span class="tag pp">Persona ${e2(n.persona)}</span> <span class="note">${e2(n.why)}</span></span><button type="button" class="btn" data-np="${i}">เพิ่มลงปฏิทิน (พรุ่งนี้)</button></div>`).join(''):'<span class="note"> ไม่มี</span>'}</div>`}
@@ -1150,9 +1172,9 @@ $('csvFile').onchange = e => {
       if(!cleanTitle && !link) return;
       const nt = norm(cleanTitle), key = link || (nt + '|' + iso);
       if(seen.has(key)) return; seen.add(key);
-      const tg = (link && P.find(p => p.url === link)) || (nt && P.find(p => norm(p.t) === nt)) ||
+      const tg = P.find(p => p.ik === key) || (link && P.find(p => p.url === link)) || (nt && P.find(p => norm(p.t) === nt)) ||
         (nt.length >= 8 && P.find(p => p.iso === iso && norm(p.t).length >= 8 && (norm(p.t).includes(nt) || nt.includes(norm(p.t))))) || null;
-      plan.push({r, cleanTitle, iso, link, tg});
+      plan.push({r, cleanTitle, iso, link, tg, key});
     });
     if(!perm('edit')){ deny(); return; }
     const nNew = plan.filter(p => !p.tg).length;
@@ -1175,14 +1197,9 @@ $('csvFile').onchange = e => {
           if(!cb || !cb.checked) return;
           tg = newPost(p.cleanTitle || ('โพสต์วันที่ ' + p.iso), p.iso, 'aw'); tg.s = 4; S.done.add(tg.n); created++;
         } else updated++;
-        if(p.link) tg.url = p.link;
+        if(p.link) tg.url = p.link; tg.ik = p.key;
         const m = C.met[tg.n] = C.met[tg.n] || {}, r = p.r;
-        if(idxReach >= 0) m.rc = toNum(r[idxReach]);
-        if(idxViews >= 0) m.vw = toNum(r[idxViews]);
-        if(idxEng >= 0)   m.en = toNum(r[idxEng]);
-        if(idxShare >= 0) m.ss = toNum(r[idxShare]);
-        if(idxMsg >= 0)   m.dm = toNum(r[idxMsg]);
-        if(idxLead >= 0)  m.rg = toNum(r[idxLead]);
+        const st=(k,x)=>{if(x<0)return;const v=toNum(r[x]);if(v>0||m[k]===undefined||m[k]==='')m[k]=v};st('rc',idxReach);st('vw',idxViews);st('en',idxEng);st('ss',idxShare);st('dm',idxMsg);st('rg',idxLead);
       });
       sm.innerHTML = `<div class="note" style="color:var(--cv);font-weight:600">✅ นำเข้าแล้ว: สร้างใหม่ ${created} · อัปเดต ${updated} รายการ</div>`;
       $('csvFile').value = '';
@@ -1236,7 +1253,7 @@ document.addEventListener('toggle',e=>{const t=e.target;if(t.matches&&t.matches(
   $('mtB').onclick=async()=>{const R=mrows().filter(r=>{const m=C.met[r.k];return m&&(m.rc||m.vw||m.en||m.dm||m.rg)}),px=$('mtP').value.trim();
     if(!R.length&&!px){$('mtS').textContent='กรุณาอัปโหลดไฟล์ CSV หรือกรอกตัวเลขอย่างน้อย 1 โพสต์ก่อน';return}
     $('mtB').disabled=true;$('mtS').textContent='กำลังให้ Gemini วิเคราะห์ข้อมูลและไฟล์ CSV...';
-    try{const data=R.map(r=>({id:r.k,title:r.t,date:r.iso,url:r.url||null,funnel:r.f,persona:r.p,platform:r.m,owner:r.o||null,metrics:C.met[r.k]}));
+    try{const data=R.slice(0,40).map(r=>({id:r.k,title:r.t,date:r.iso,url:r.url||null,funnel:r.f,persona:r.p,platform:r.m,owner:r.o||null,metrics:C.met[r.k]}));
       MR=await aiJson('คุณคือที่ปรึกษาการตลาดดิจิทัลของ Udomkati Brewing Academy สถาบันสอนต้มเบียร์ระดับมืออาชีพในไทย\n'+PERS+'\nเป้า Funnel 50% Awareness (ดู Reach, ดูจนจบ, แชร์/เซฟ), 30% Consideration (ดูจนจบ, ข้อความทัก), 20% Conversion (สมัคร/จอง)\nผลโพสต์ในแดชบอร์ด (JSON): '+JSON.stringify(data)+'\nข้อมูลจากไฟล์ CSV / แพลตฟอร์มโฆษณา:\n<<<\n'+px.slice(0,8000)+'\n>>>\nวิเคราะห์อย่างละเอียดว่าคอนเทนต์หรือแอดตัวไหนได้ผลดีที่สุด (Winning Content) ตัวไหนควรปรับปรุง และให้คำแนะนำเชิงปฏิบัติสำหรับลูกตาล (คนวางคอนเทนต์) และเพียว (คนยิงแอด) ตอบเป็น JSON เท่านั้น: {"summary":"..","wins":[".."],"issues":[".."],"by_persona":{"A":"..","B":"..","C":".."},"adjustments":[{"action":"..","reason":"..","when":".."}],"next_posts":[{"title":"..","persona":"A","funnel":"aw","why":".."}],"data_gaps":[".."]}');
       mtShow();$('mtS').textContent=''}catch(e){$('mtS').textContent=aerr(e)}
     $('mtB').disabled=false};
