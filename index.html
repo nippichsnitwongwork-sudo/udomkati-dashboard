@@ -121,6 +121,12 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
 .syncBar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-size:13px}
 .dotOnline{display:inline-block;width:8px;height:8px;border-radius:50%;background:#2e7d32;margin-right:4px}
 .roleBanner{background:var(--chip);border-left:5px solid var(--aw);border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.vh{display:none!important}
+html{scroll-padding-top:calc(64px + env(safe-area-inset-top,0px))}
+nav.nv{position:sticky;top:0;z-index:30;background:var(--bg);padding:8px 0;margin:0 0 12px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:thin;border-bottom:1px solid var(--line)}
+nav.nv .chip{white-space:nowrap;flex:none}
+.nb{display:inline-block;min-width:18px;padding:0 5px;margin-left:6px;border-radius:9px;background:var(--bad);color:#fff;font-size:11px;font-weight:700;text-align:center}
+.nb[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -202,18 +208,7 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
   <div style="display:flex;gap:6px;flex-wrap:wrap" id="bannerActions"></div>
 </div>
 
-<nav class="nv" aria-label="Sections">
-  <button type="button" class="chip keep" id="myWorkBtn" style="background:var(--aw);color:#fff;border-color:var(--aw)">🎯 งานของฉัน</button>
-  <button type="button" class="chip keep" data-go="alsec">Overview</button>
-  <button type="button" class="chip keep" data-go="calsec">Calendar</button>
-  <button type="button" class="chip keep" data-go="postsec">🔗 ติดตามโพสต์</button>
-  <button type="button" class="chip keep" data-go="tpsec">Tasks &amp; Templates</button>
-  <button type="button" class="chip keep" data-go="pjsec">Projects</button>
-  <button type="button" class="chip keep" data-go="plsec">🤖 AI Planner</button>
-  <button type="button" class="chip keep" data-go="aisec">🤖 AI Persona</button>
-  <button type="button" class="chip keep" data-go="mtsec">📂 วิเคราะห์ CSV &amp; Ads</button>
-  <button type="button" class="chip keep" data-go="tmsec">👥 Team &amp; Invite</button>
-</nav>
+<nav class="nv" aria-label="เมนูหลัก" id="mainNav"><button type="button" class="chip keep" id="myWorkBtn" style="background:var(--aw);color:#fff;border-color:var(--aw)">🎯 งานของฉัน</button><button type="button" class="chip keep" data-vb="home" aria-pressed="false">🏠 ภาพรวม<span class="nb" id="nb-home" hidden></span></button><button type="button" class="chip keep" data-vb="calendar" aria-pressed="false">📅 ปฏิทิน<span class="nb" id="nb-calendar" hidden></span></button><button type="button" class="chip keep" data-vb="posts" aria-pressed="false">🔗 โพสต์<span class="nb" id="nb-posts" hidden></span></button><button type="button" class="chip keep" data-vb="tasks" aria-pressed="false">✅ งาน & เทมเพลต<span class="nb" id="nb-tasks" hidden></span></button><button type="button" class="chip keep" data-vb="projects" aria-pressed="false">📊 โปรเจกต์<span class="nb" id="nb-projects" hidden></span></button><button type="button" class="chip keep" data-vb="ai" aria-pressed="false">🤖 AI<span class="nb" id="nb-ai" hidden></span></button><button type="button" class="chip keep" data-vb="analytics" aria-pressed="false">📂 ผลลัพธ์ & CSV<span class="nb" id="nb-analytics" hidden></span></button><button type="button" class="chip keep" data-vb="team" aria-pressed="false">👥 ทีม<span class="nb" id="nb-team" hidden></span></button><button type="button" class="chip keep" data-vb="ref" aria-pressed="false">📚 อ้างอิง<span class="nb" id="nb-ref" hidden></span></button></nav>
 
 <!-- แถบลิงก์เครื่องมือ AI ช่วยทำงาน -->
 <div class="aiLinks">
@@ -225,8 +220,8 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
   <a href="https://www.facebook.com/ads/library/" target="_blank" rel="noopener" class="chip keep">📊 Meta Ad Library</a>
 </div>
 
-<div class="card" id="cd" style="margin-bottom:14px"></div>
-<section class="card" id="alsec">
+<div class="card" id="cd" style="margin-bottom:14px" data-view="home"></div>
+<section class="card" id="alsec" data-view="home">
   <h2>Alerts &amp; Timeline Check · แจ้งเตือนและตรวจไทม์ไลน์</h2>
   <div class="note" id="stS"></div>
   <div id="alL"></div>
@@ -234,11 +229,9 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
   <textarea id="alT" rows="7" hidden aria-label="ข้อความสรุป"></textarea>
   <p class="note">แจ้งเตือนคำนวณจากข้อมูลในแดชบอร์ดทุกครั้งที่เปิดหรือแก้ไข ใช้ปุ่มสร้างสรุปเพื่อคัดลอกไปส่งใน LINE กลุ่มทีม</p>
 </section>
-<div class="grid kpis" id="kpis"></div>
+<div class="grid kpis" id="kpis" data-view="home"></div>
 
-<div class="grid two">
-  <section class="card">
-    <h2>Funnel Mix · สัดส่วน Funnel</h2>
+<div class="grid two" data-view="home"> <section class="card"> <h2>Funnel Mix · สัดส่วน Funnel</h2>
     <div class="funnel" id="funnel"></div>
     <p class="note">เป้าหมายแผน: Awareness 50 / Consideration 30 / Conversion 20 (ระบบเตือนเมื่อสัดส่วนจริงต่างเกิน 10 จุด)</p>
   </section>
@@ -249,7 +242,7 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
   </section>
 </div>
 
-<section class="card" id="calsec">
+<section class="card" id="calsec" data-view="calendar">
   <h2>Monthly Calendar · ปฏิทินรายเดือน (ลูกตาล / ลูกปลา)</h2>
   <div class="filters">
     <div class="fg"><button class="btn keep" id="cp" type="button" aria-label="เดือนก่อนหน้า">&lt;</button><b id="cm" style="min-width:90px;text-align:center"></b><button class="btn keep" id="cn" type="button" aria-label="เดือนถัดไป">&gt;</button><button class="btn keep" id="ct" type="button">วันนี้</button></div>
@@ -262,12 +255,12 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
   <div class="card" id="cdet"></div>
 </section>
 
-<section class="card" id="postsec">
+<section class="card" id="postsec" data-view="posts">
   <h2>Content Posts &amp; Live Tracker · รายการโพสต์และติดตามลิงก์โพสต์จริง (ลูกตาล / ลูกปลา)</h2>
   <div class="filters">
     <div class="fg" id="fF"><span>ช่วง Funnel</span></div>
     <div class="fg" id="fP"><span>Persona</span></div>
-    <div class="fg" id="fL"><span>สถานะลิงก์</span></div>
+    <div class="fg" id="fL"><span>สถานะลิงก์</span></div><div class="fg" id="fS"><span>ความคืบหน้า</span></div>
     <input class="keep" type="search" id="q" placeholder="ค้นหาหัวข้อหรือฮุก" aria-label="ค้นหา">
   </div>
   <div class="note" id="prog-t"></div>
@@ -275,7 +268,7 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
   <div id="list"></div>
 </section>
 
-<section class="card" id="tpsec">
+<section class="card" id="tpsec" data-view="tasks">
   <h2>Campaign Template Library · คลังเทมเพลตแคมเปญ</h2>
   <div class="cats" id="tpCats"></div>
   <div class="addrow"><label>Category <select id="tpC" aria-label="Category"></select></label><label>Launch Day (T-0) <input type="date" id="tpD"></label><label>Campaign name <input type="text" id="tpN" placeholder="e.g. VLB Masterclass Nov" aria-label="Campaign name"></label><button type="button" class="btn" id="tpP">Preview schedule</button></div>
@@ -283,7 +276,7 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
   <p class="note">Dates are calculated from Launch Day (T-0). Tasks whose collaborator list includes แมท or แม็ก are flagged as Needs approval.</p>
 </section>
 
-<section class="card" id="tasksec">
+<section class="card" id="tasksec" data-view="tasks">
   <h2>Task Schedule · ตารางการทำงาน</h2>
   <div class="filters"><div class="fg" id="tF"><span>แสดง</span></div></div>
   <div class="note" id="tp"></div>
@@ -292,20 +285,20 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
   <div class="addrow"><b>เพิ่มงานใหม่</b><input type="date" id="tD" aria-label="วันที่"><input type="text" id="tN" placeholder="ชื่องาน เช่น ตัดต่อสคริปต์ 2" aria-label="ชื่องาน"><select id="tO" aria-label="ผู้รับผิดชอบ"></select><select id="tPJ" aria-label="โปรเจกต์"></select><label><input type="checkbox" id="tG"> ต้องขออนุมัติ (แม็ก/แมท)</label><button type="button" class="btn" id="tB">เพิ่มงาน</button></div>
 </section>
 
-<section class="card" id="shootsec">
+<section class="card" id="shootsec" data-view="tasks">
   <h2>On-site Shoot Checklist · เช็กลิสต์ถ่ายหน้างาน &amp; ทำคลิป (ลูกปลา)</h2>
   <div class="tabs" id="oT"></div>
   <div id="oL"></div>
 </section>
 
-<section class="card" id="pjsec">
+<section class="card" id="pjsec" data-view="projects">
   <h2>Projects &amp; Timeline · โปรเจกต์และไทม์ไลน์ (แม็ก / แมท ดูภาพรวม)</h2>
   <div id="pjM"></div>
   <div class="addrow" id="pjF"><input type="text" id="pjN" placeholder="ชื่อโปรเจกต์ เช่น คอร์ส VLB หรือ #UDKClassOnTour" aria-label="ชื่อโปรเจกต์"><select id="pjC" aria-label="สี"><option value="#2f6f8f" style="color:#2f6f8f">● น้ำเงิน</option><option value="#b8791f" style="color:#b8791f">● ส้มทอง</option><option value="#3f7d4e" style="color:#3f7d4e">● เขียว</option><option value="#9b3d6b" style="color:#9b3d6b">● ม่วงแดง</option><option value="#6a4fb3" style="color:#6a4fb3">● ม่วง</option><option value="#c0562e" style="color:#c0562e">● ส้มแดง</option><option value="#1f8a85" style="color:#1f8a85">● เขียวน้ำทะเล</option><option value="#7a6f2a" style="color:#7a6f2a">● มะกอก</option></select><button type="button" class="btn" id="pjB">Create project</button></div>
   <p class="note">เฉพาะแม็กและแมท (Host) สร้างและลบโปรเจกต์หลักได้</p>
 </section>
 
-<section class="card" id="plsec">
+<section class="card" id="plsec" data-view="ai">
   <h2>AI Campaign Planner · AI ช่วยคิดไอเดียและวางไทม์ไลน์ (สำหรับลูกตาล / ทีม)</h2>
   <p class="note">ใส่โจทย์หรือเป้าหมายของแคมเปญ เลือกช่วงวันที่ AI (Gemini) จะเสนอไอเดียโพสต์และงานผลิตที่ต้องทำก่อนวันโพสต์ ให้เลือกรายการที่ต้องการแล้วนำเข้าปฏิทินทันที</p>
   <textarea id="plB" rows="4" placeholder="เช่น: โปรโมตคอร์ส VLB Microbrewery รุ่นถัดไปให้เจ้าของธุรกิจที่อยากเปิดโรงเบียร์ ใช้ Facebook และ TikTok" aria-label="โจทย์แคมเปญ"></textarea>
@@ -313,7 +306,7 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
   <div id="plR"></div>
 </section>
 
-<section class="card" id="aisec">
+<section class="card" id="aisec" data-view="ai">
   <h2>AI Persona Fit · AI วิเคราะห์ว่าคอนเทนต์ตรง Persona ไหน (สำหรับลูกตาล / เพียว)</h2>
   <p class="note">วางไอเดีย หัวข้อ ฮุก หรือสคริปต์ของโพสต์ใหม่ AI จะประเมิน Persona หลัก/รอง ช่วง Funnel ความเสี่ยง และเสนอฮุกที่ปรับให้ตรงกลุ่ม</p>
   <textarea id="aiT" rows="4" placeholder="เช่น: คลิปสาธิตการแก้ปัญหาฟองล้นตอนกดเบียร์สด สำหรับร้านที่ซื้อ Draft System ใหม่" aria-label="ไอเดียคอนเทนต์"></textarea>
@@ -321,7 +314,7 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
   <div id="aiR"></div>
 </section>
 
-<section class="card" id="mtsec">
+<section class="card" id="mtsec" data-view="analytics">
   <h2>Performance, CSV Analytics &amp; Post Tracking · อัปโหลด CSV &amp; วิเคราะห์ผล (ลูกปลา / เพียว)</h2>
   <p class="note">ลูกปลา: วางลิงก์โพสต์จริงและอัปเดตยอดสมัคร · เพียว: อัปโหลดไฟล์ CSV จาก Meta Business Suite / Ads Manager / TikTok เพื่อดึงตัวเลขเข้าตารางและให้ AI วิเคราะห์</p>
   
@@ -346,7 +339,7 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
   <div id="mtR"></div>
 </section>
 
-<section class="card" id="tmsec">
+<section class="card" id="tmsec" data-view="team">
   <h2>Team, Host Invite &amp; Data Backup · จัดการทีม เชิญสมาชิก และสำรองข้อมูล</h2>
   <div class="note" id="meB" style="margin-bottom:8px;font-weight:600;color:var(--ink)"></div>
   
@@ -395,15 +388,12 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
   <div id="lgL"></div>
 </section>
 
-<section class="card">
-  <h2>Student Personas · Persona 3 กลุ่ม</h2>
+<section class="card" data-view="ref"> <h2>Student Personas · Persona 3 กลุ่ม</h2>
   <div class="tabs" id="ptabs"></div>
   <div class="pcol" id="pdet"></div>
 </section>
 
-<div class="grid two">
-  <section class="card">
-    <h2>Competitor Gap Analysis · ช่องว่างเทียบคู่แข่ง</h2>
+<div class="grid two" data-view="ref"> <section class="card"> <h2>Competitor Gap Analysis · ช่องว่างเทียบคู่แข่ง</h2>
     <div class="scroll"><table>
       <tr><th></th><th>Born to Beer</th><th>HOP Academy</th><th>Udomkati</th></tr>
       <tr><td>ระดับการสอน</td><td>Homebrew 19-20 ลิตร</td><td>ผู้ประกอบการแบบผสมผสาน</td><td>Commercial และ Microbrewery</td></tr>
@@ -539,7 +529,7 @@ async function callGeminiJSON(promptText) {
 const aerr=e=>e&&e.code==='no_key'?'กรุณาตั้งค่า Gemini API Key ก่อนใช้งาน (ปุ่ม ⚙️ AI Key ด้านบน)':('วิเคราะห์ไม่สำเร็จ: '+(e&&e.msg?e.msg:'กรุณาตรวจสอบ API Key อีกครั้ง'));
 
 function vis(){
-  return P.filter(x=>(S.f==='all'||x.f===S.f)&&(S.p==='all'||x.p.includes(S.p))&&(S.w==='all'||x.w==S.w)&&(S.l==='all'||(S.l==='yes'&&x.url)||(S.l==='no'&&!x.url))&&(!S.q||(x.t+x.h).includes(S.q)));
+  return P.filter(x=>(S.f==='all'||x.f===S.f)&&(S.p==='all'||x.p.includes(S.p))&&(S.w==='all'||x.w==S.w)&&(S.l==='all'||(S.l==='yes'&&x.url)||(S.l==='no'&&!x.url))&&(!S.q||(x.t+x.h).toLowerCase().includes(S.q.toLowerCase()))&&(S.sx==='all'||(S.sx==='open'&&!S.done.has(x.n))||(S.sx==='done'&&S.done.has(x.n))));
 }
 function chips(id,items,key){
   const el=$(id);
@@ -548,7 +538,7 @@ function chips(id,items,key){
 }
 function mark(id,key){$(id).querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===String(S[key]))))}
 function render(){
-  mark('fF','f');mark('fP','p');mark('fL','l');
+  mark('fF','f');mark('fP','p');mark('fL','l');mark('fS','sx');
   const v=vis();
   const c=k=>v.filter(x=>x.f===k).length;
   const done=v.filter(x=>S.done.has(x.n)).length;
@@ -670,7 +660,7 @@ function ensureDefaultTeam(){
   });
 }
 
-function snap(){return {plan:{posts:P.map(x=>({n:x.n,t:x.t,h:x.h,m:x.m,g:x.g,f:x.f,p:x.p,iso:x.iso,o:x.o||'',s:x.s||0,k:x.k||'',pj:x.pj||'',url:x.url||''}))},tasks:{x:TK},items:{cu:C.cu.map(c=>{const r={...c};delete r.busy;return r}),ev:EV},check:{ox:C.ox,xs:C.xs,od:[...S.od],hs:C.hs,hi:C.hi},done:{dn:[...S.done],td:[...S.td]},team:{m:C.tm},metrics:{m:C.met},projects:{m:C.pj},log:{m:C.lg}}}
+function snap(){return {plan:{posts:P.map(x=>({n:x.n,t:x.t,h:x.h,m:x.m,g:x.g,f:x.f,p:x.p,iso:x.iso,o:x.o||'',s:x.s||0,k:x.k||'',pj:x.pj||'',url:x.url||''}))},tasks:{x:TK},items:{cu:C.cu.map(c=>{const r={...c};delete r.busy;return r}),ev:EV},check:{ox:C.ox,xs:C.xs,od:[...S.od],hs:C.hs,hi:C.hi},done:{dn:[...S.done],td:[...S.td]},team:{m:C.tm},metrics:{m:C.met},projects:{m:C.pj}}}
 function apply(k,j){
   if(!j)return;
   if(k==='plan'){if(j.posts){P.length=0;j.posts.forEach(x=>{P.push(x);setP(x,x.iso||null)})}}
@@ -681,7 +671,7 @@ function apply(k,j){
   else if(k==='team'){C.tm=j.m||[];ensureDefaultTeam();}
   else if(k==='metrics')C.met=j.m||{};
   else if(k==='projects')C.pj=j.m||[];
-  else if(k==='log')C.lg=j.m||[]}
+  else if(k==='log'){}}
 
 function sv(forceAll){
   const c=snap();
@@ -988,7 +978,7 @@ function al(){
   const sp=P.filter(x=>x.iso);if(sp.length)[['aw',50],['co',30],['cv',20]].forEach(([k,g])=>{const f=sp.filter(x=>x.f===k).length/sp.length*100;if(Math.abs(f-g)>=10)add(2,`สัดส่วน ${ST[k]} ${Math.round(f)}% ต่างจากเป้า ${g}% เกิน 10 จุด`)});
   P.forEach(x=>{if(x.iso&&dd(x.iso)<=-1&&S.done.has(x.n)&&!x.url)add(2,`โพสต์ #${x.n} โพสต์แล้วแต่ยังไม่ได้วางลิงก์ติดตามโพสต์ (ลูกปลา)`)});
   P.forEach(x=>{if(x.iso&&dd(x.iso)<=-2&&S.done.has(x.n)&&!(C.met[x.n]&&C.met[x.n].rc))add(2,`โพสต์ #${x.n} โพสต์แล้วแต่ยังไม่กรอกผลลัพธ์/ยอดสมัคร (เพียว/ลูกปลา)`)});
-  A.sort((a,b)=>a[0]-b[0]);ALA=A;
+  A.sort((a,b)=>a[0]-b[0]);ALA=A;navBadges();
   $('alL').innerHTML=A.length?A.map(a=>`<div class="task"><span class="tag" style="${a[0]===0?'color:var(--bad);font-weight:700':a[0]===1?'color:var(--co)':''}">${LV[a[0]]}</span><span class="tx">${esc(a[1])}</span></div>`).join(''):'<div class="empty">ไม่มีรายการเตือน Timeline ปกติดี</div>';
   $('stS').textContent='Production pipeline: '+STG.map((s,i)=>s+' '+P.filter(x=>(x.s||0)===i).length).join(' · ');
 }
@@ -1144,70 +1134,61 @@ $('csvFile').onchange = e => {
     const idxLead  = findCol(['total clicks', 'lead', 'purchase', 'registration', 'conversion', 'สมัคร', 'ผลลัพธ์']);
     const idxLink  = findCol(['permalink', 'link', 'url', 'ลิงก์']);
 
-    let matchedCount = 0, createdCount = 0;
-    const toNum = val => { const n = parseFloat(String(val||'').replace(/,/g,'')); return isNaN(n) ? 0 : n; };
-
+    const toNum = v => { const n = parseFloat(String(v||'').replace(/,/g,'')); return isNaN(n) ? 0 : n; };
+    const norm = s => un(s).toLowerCase().replace(/[^\p{L}\p{N}]+/gu,'');
+    const plan = [], seen = new Set();
     dataRows.forEach(r => {
       const rawTitle = (idxTitle >= 0 && r[idxTitle]) ? r[idxTitle] : ((idxDesc >= 0 && r[idxDesc]) ? r[idxDesc] : '');
       const cleanTitle = rawTitle.replace(/\s+/g, ' ').trim().slice(0, 85);
       const dateRaw = idxDate >= 0 ? (r[idxDate] || '') : '';
-      let isoMatch = tdy();
-      const dmYMD = /(\d{4})[-/](\d{1,2})[-/](\d{1,2})/.exec(dateRaw);
-      const dmMDY = /(\d{1,2})[-/](\d{1,2})[-/](\d{4})/.exec(dateRaw);
-      if(dmYMD){
-        isoMatch = `${dmYMD[1]}-${dmYMD[2].padStart(2,'0')}-${dmYMD[3].padStart(2,'0')}`;
-      } else if(dmMDY){
-        const p1 = +dmMDY[1], p2 = +dmMDY[2], yr = dmMDY[3];
-        const mm = p1 > 12 ? p2 : p1;
-        const dd = p1 > 12 ? p1 : p2;
-        isoMatch = `${yr}-${String(mm).padStart(2,'0')}-${String(dd).padStart(2,'0')}`;
-      }
-
-      const linkVal = (idxLink >= 0 && r[idxLink] && r[idxLink].startsWith('http')) ? r[idxLink].trim() : '';
-      if(!cleanTitle && !linkVal) return;
-
-      let targetPost = P.find(p => (linkVal && p.url === linkVal) || (cleanTitle && p.t && p.t === esc(cleanTitle)));
-      if(!targetPost){
-        targetPost = newPost(cleanTitle || ('โพสต์วันที่ ' + isoMatch), isoMatch, 'aw');
-        targetPost.s = 4;
-        S.done.add(targetPost.n);
-        createdCount++;
-      } else {
-        matchedCount++;
-      }
-
-      if(linkVal) targetPost.url = linkVal;
-      const m = C.met[targetPost.n] = C.met[targetPost.n] || {};
-      if(idxReach >= 0) m.rc = toNum(r[idxReach]);
-      if(idxViews >= 0) m.vw = toNum(r[idxViews]);
-      if(idxEng >= 0)   m.en = toNum(r[idxEng]);
-      if(idxShare >= 0) m.ss = toNum(r[idxShare]);
-      if(idxMsg >= 0)   m.dm = toNum(r[idxMsg]);
-      if(idxLead >= 0)  m.rg = toNum(r[idxLead]);
+      let iso = tdy();
+      const a = /(\d{4})[-/](\d{1,2})[-/](\d{1,2})/.exec(dateRaw), b = /(\d{1,2})[-/](\d{1,2})[-/](\d{4})/.exec(dateRaw);
+      const fy = y => { y = +y; return y > 2400 ? y - 543 : y; };
+      if(a) iso = `${fy(a[1])}-${a[2].padStart(2,'0')}-${a[3].padStart(2,'0')}`;
+      else if(b){ const p1 = +b[1], p2 = +b[2]; iso = `${fy(b[3])}-${String(p1 > 12 ? p2 : p1).padStart(2,'0')}-${String(p1 > 12 ? p1 : p2).padStart(2,'0')}`; }
+      const link = (idxLink >= 0 && r[idxLink] && r[idxLink].startsWith('http')) ? r[idxLink].trim() : '';
+      if(!cleanTitle && !link) return;
+      const nt = norm(cleanTitle), key = link || (nt + '|' + iso);
+      if(seen.has(key)) return; seen.add(key);
+      const tg = (link && P.find(p => p.url === link)) || (nt && P.find(p => norm(p.t) === nt)) ||
+        (nt.length >= 8 && P.find(p => p.iso === iso && norm(p.t).length >= 8 && (norm(p.t).includes(nt) || nt.includes(norm(p.t))))) || null;
+      plan.push({r, cleanTitle, iso, link, tg});
     });
-
-    const previewCols = rows[0].slice(0, 8);
-    let tbl = `<div class="note" style="margin-bottom:6px;color:var(--cv);font-weight:600">✅ นำเข้าไฟล์ "${esc(file.name)}" สำเร็จ (${dataRows.length} แถว) · สร้างโพสต์ใหม่เข้าตาราง ${createdCount} โพสต์ และอัปเดตโพสต์เดิม ${matchedCount} โพสต์</div>`;
-    tbl += `<div class="scroll"><table style="font-size:12px"><tr>${previewCols.map(c=>`<th>${esc(c)}</th>`).join('')}</tr>`;
-    dataRows.slice(0, 8).forEach(r => {
-      tbl += `<tr>${previewCols.map((_,i)=>`<td>${esc((r[i]||'').slice(0,45))}</td>`).join('')}</tr>`;
-    });
-    tbl += `</table></div>`;
-    $('csvSummary').innerHTML = tbl;
-
-    const slimLines = dataRows.slice(0, 35).map((r, idx) => {
-      const t = ((idxTitle>=0&&r[idxTitle])||(idxDesc>=0&&r[idxDesc])||'').replace(/\s+/g,' ').slice(0,60);
-      const dt = idxDate>=0 ? r[idxDate] : '';
-      const rc = idxReach>=0 ? r[idxReach] : 0;
-      const vw = idxViews>=0 ? r[idxViews] : 0;
-      const en = idxEng>=0 ? r[idxEng] : 0;
-      const sh = idxShare>=0 ? r[idxShare] : 0;
-      return `#${idx+1} [${dt}] "${t}" | Reach: ${rc}, Views: ${vw}, Engagements: ${en}, Shares: ${sh}`;
-    });
-    $('mtP').value = `[สรุปข้อมูลจากไฟล์ Meta CSV: ${file.name}]\n` + slimLines.join('\n');
-    logA(`นำเข้าไฟล์ CSV "${file.name}" (${dataRows.length} รายการ)`);
-    ch();
-    toast(`นำเข้าโพสต์จาก CSV ลงตารางสำเร็จ ${createdCount + matchedCount} รายการ!`);
+    if(!perm('edit')){ deny(); return; }
+    const nNew = plan.filter(p => !p.tg).length;
+    const sm = $('csvSummary');
+    sm.innerHTML = `<div class="note" style="font-weight:600;color:var(--ink)">พบ ${plan.length} รายการใน "${esc(file.name)}" · จับคู่โพสต์เดิม ${plan.length - nNew} · ต้องสร้างใหม่ ${nNew} (ติ๊กเฉพาะรายการที่ต้องการสร้าง)</div><div class="scroll"><table style="font-size:12px"><tr><th></th><th>รายการในไฟล์</th><th>วันที่</th><th>ผลการจับคู่</th></tr>` +
+      plan.slice(0, 200).map((p, i) => `<tr><td>${p.tg ? '' : `<input type="checkbox" data-ci="${i}" checked>`}</td><td>${esc(p.cleanTitle || p.link)}</td><td>${thd(p.iso)}</td><td>${p.tg ? '🔄 อัปเดตตัวเลขของ #' + p.tg.n + ' ' + p.tg.t : '➕ สร้างโพสต์ใหม่'}</td></tr>`).join('') +
+      `</table></div>${plan.length > 200 ? '<div class="note">แสดง 200 รายการแรก (รายการที่เหลือจับคู่/สร้างตามเดิม)</div>' : ''}<div class="addrow"><button type="button" class="btn keep" id="csvOk" style="background:var(--cv);color:#fff">✅ ยืนยันนำเข้า</button><button type="button" class="btn keep" id="csvNo">ยกเลิก</button></div>`;
+    $('mtP').value = `[สรุปข้อมูลจากไฟล์ CSV: ${file.name}]\n` + dataRows.slice(0, 35).map((r, k) => {
+      const g = x => x >= 0 ? r[x] : 0;
+      return `#${k+1} [${g(idxDate) || ''}] "${((idxTitle>=0&&r[idxTitle])||(idxDesc>=0&&r[idxDesc])||'').replace(/\s+/g,' ').slice(0,60)}" | Reach: ${g(idxReach)}, Views: ${g(idxViews)}, Engagements: ${g(idxEng)}, Shares: ${g(idxShare)}`;
+    }).join('\n');
+    $('csvNo').onclick = () => { sm.innerHTML = ''; $('csvFile').value = ''; toast('ยกเลิกการนำเข้า CSV'); };
+    $('csvOk').onclick = () => {
+      if(!perm('edit')){ deny(); return; }
+      let created = 0, updated = 0;
+      plan.forEach((p, i) => {
+        let tg = p.tg;
+        if(!tg){
+          const cb = sm.querySelector(`[data-ci="${i}"]`);
+          if(!cb || !cb.checked) return;
+          tg = newPost(p.cleanTitle || ('โพสต์วันที่ ' + p.iso), p.iso, 'aw'); tg.s = 4; S.done.add(tg.n); created++;
+        } else updated++;
+        if(p.link) tg.url = p.link;
+        const m = C.met[tg.n] = C.met[tg.n] || {}, r = p.r;
+        if(idxReach >= 0) m.rc = toNum(r[idxReach]);
+        if(idxViews >= 0) m.vw = toNum(r[idxViews]);
+        if(idxEng >= 0)   m.en = toNum(r[idxEng]);
+        if(idxShare >= 0) m.ss = toNum(r[idxShare]);
+        if(idxMsg >= 0)   m.dm = toNum(r[idxMsg]);
+        if(idxLead >= 0)  m.rg = toNum(r[idxLead]);
+      });
+      sm.innerHTML = `<div class="note" style="color:var(--cv);font-weight:600">✅ นำเข้าแล้ว: สร้างใหม่ ${created} · อัปเดต ${updated} รายการ</div>`;
+      $('csvFile').value = '';
+      logA(`นำเข้า CSV "${file.name}" สร้างใหม่ ${created} อัปเดต ${updated}`);
+      ch(); toast(`นำเข้า CSV สำเร็จ: ใหม่ ${created} · อัปเดต ${updated}`);
+    };
   };
   reader.readAsText(file);
 };
@@ -1356,7 +1337,7 @@ function meUpdate(){
     updatePresence();
     if(!ME.routed){
       ME.routed = true;
-      toast(`ยินดีต้อนรับคุณ${ME.name} (${matched.r})`);
+      toast(`ยินดีต้อนรับคุณ${ME.name} (${matched.r})`);goFocus(matched.focus);
     }
   } else {
     $('authOverlay').style.display = 'flex';
@@ -1422,7 +1403,7 @@ if(fbAuth){
       ME.email = (user.email || '').toLowerCase();
       // บังคับปลดล็อกให้เข้าหน้าเลือกตำแหน่งได้ทันที แม้ฐานข้อมูลกำลังโหลด
       dbInit();
-      startGemini(); startPresence();
+      startGemini(); startPresence(); startLog();
       refresh();
     } else {
       ME.uid = null; ME.email = ''; ME.name = ''; ME.host = false; ME.routed = false;
@@ -1506,7 +1487,11 @@ function toast(m){let t=$('toast');if(!t){t=document.createElement('div');t.id='
 function perm(k,it){if(ME.host)return true;const r=ME.role;if(r==='editor')return k!=='members';
   if(r==='own'){if(k==='status'||k==='done'||k==='metric')return !!it&&!!ME.name&&((it.o!==undefined?it.o:it[2])||'')===ME.name;return false}return false}
 function deny(){toast('คุณไม่มีสิทธิ์ทำรายการนี้ (สิทธิ์ของคุณ: '+(RLB[ME.role]||'-')+')')}
-function logA(m){C.lg.unshift({u:ME.name||ME.email||'ผู้ใช้',t:Date.now(),m});if(C.lg.length>60)C.lg.length=60}
+function logA(m){const e={u:ME.name||ME.email||'ผู้ใช้',t:Date.now(),m:String(m).slice(0,200)};
+  if(fbDb&&ME.uid&&DBS.ready){fbDb.ref('udk_log').push({u:e.u,t:firebase.database.ServerValue.TIMESTAMP,m:e.m}).catch(()=>{})}
+  else{C.lg.unshift(e);if(C.lg.length>60)C.lg.length=60}}
+function renderLog(){const e=$('lgL');if(e)e.innerHTML=C.lg.length?C.lg.slice(0,25).map(l=>`<div class="note">${new Date(l.t).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'})} · <b>${esc(l.u)}</b>: ${esc(l.m)}</div>`).join(''):'<span class="note">ยังไม่มีประวัติ</span>'}
+function startLog(){if(!fbDb)return;const q=fbDb.ref('udk_log').orderByChild('t').limitToLast(60),h=q.on('value',s=>{const a=[];s.forEach(c=>{a.push(c.val())});C.lg=a.reverse();renderLog()},()=>{});UNSUB.push(()=>q.off('value',h))}
 const pjSel=(a,v)=>`<select ${a} aria-label="โปรเจกต์"><option value="">ไม่มี</option>${C.pj.map(p=>`<option value="${p.id}"${p.id===v?' selected':''}>${esc(p.n)}</option>`).join('')}</select>`;
 function pjLeg(){$('pjL').innerHTML=C.pj.length?'<span>โปรเจกต์</span>'+C.pj.map(p=>`<button type="button" class="chip keep" data-hp="${p.id}" aria-pressed="${!C.hp.has(p.id)}"><span style="color:${p.c}" aria-hidden="true">●</span> ${esc(p.n)}</button>`).join(''):''}
 function pjm(){
@@ -1641,6 +1626,24 @@ persona();sim();
 if(!fbDb) dbInit();
 if(/Line\/|FBAN|FBAV|Instagram/i.test(navigator.userAgent)) $('authErr').textContent = 'เปิดลิงก์นี้ด้วย Chrome หรือ Safari แล้วค่อยเข้าสู่ระบบด้วย Google (LINE บล็อกการ Login ของ Google)';
 if(fbAuth) fbAuth.getRedirectResult().catch(e => { $('authErr').textContent = 'เข้าสู่ระบบไม่สำเร็จ (' + (e.code || e.message) + ')'; });
+
+var VIEWS=['home', 'calendar', 'posts', 'tasks', 'projects', 'ai', 'analytics', 'team', 'ref'],CURV='home',VMAP={alsec:'home',calsec:'calendar',postsec:'posts',tpsec:'tasks',tasksec:'tasks',shootsec:'tasks',pjsec:'projects',plsec:'ai',aisec:'ai',mtsec:'analytics',tmsec:'team'};
+function setView(v,keep){
+  if(!VIEWS.includes(v))v='home';CURV=v;
+  document.querySelectorAll('[data-view]').forEach(e=>e.classList.toggle('vh',e.dataset.view!==v));
+  document.querySelectorAll('[data-vb]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.vb===v)));
+  try{history.replaceState(null,'','#'+v)}catch(e){}
+  if(!keep)window.scrollTo({top:0});
+}
+const _sIV=Element.prototype.scrollIntoView;
+Element.prototype.scrollIntoView=function(o){const s=this.closest&&this.closest('[data-view]');if(s&&s.dataset.view!==CURV)setView(s.dataset.view,true);_sIV.call(this,o)};
+function goFocus(f){if(!VIEWS.includes(location.hash.slice(1)))setView(VMAP[f]||'home',true)}
+function navBadges(){const t=tdy(),od=TK.filter((k,i)=>!S.td.has(i)&&k[0]<t).length,set=(k,n)=>{const e=$('nb-'+k);if(e){e.hidden=!n;e.textContent=n}};
+  set('home',(ALA||[]).filter(a=>a[0]===0).length);set('tasks',od);set('team',ME.host?C.rq.length:0)}
+$('mainNav').addEventListener('click',e=>{const b=e.target.closest('[data-vb]');if(b)setView(b.dataset.vb)});
+window.addEventListener('hashchange',()=>{const v=location.hash.slice(1);if(VIEWS.includes(v)&&v!==CURV)setView(v,true)});
+S.sx='all';chips('fS',[['all','ทั้งหมด'],['open','ยังไม่เผยแพร่'],['done','เผยแพร่แล้ว']],'sx');
+setView(location.hash.slice(1),true);
 </script>
 </body>
 </html>
