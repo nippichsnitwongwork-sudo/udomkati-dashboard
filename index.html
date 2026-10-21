@@ -833,66 +833,90 @@ $('csvFile').onchange = e => {
     const raw = ev.target.result || '';
     const rows = parseCSVText(raw);
     if(rows.length < 2){ toast('ไฟล์ CSV ไม่มีข้อมูลหรือรูปแบบไม่ถูกต้อง'); return; }
-    const headers = rows[0].map(h => h.toLowerCase());
+    const headers = rows[0].map(h => h.toLowerCase().trim());
     const dataRows = rows.slice(1);
 
-    // ค้นหาคอลัมน์สำคัญอัตโนมัติ (รองรับทั้งภาษาไทยและอังกฤษจาก Meta / TikTok)
-    const findCol = kwList => headers.findIndex(h => kwList.some(k => h.includes(k)));
-    const idxTitle = findCol(['title', 'description', 'post', 'ad name', 'campaign', 'ชื่อ', 'ข้อความ', 'หัวข้อ', 'แคปชัน']);
-    const idxDate  = findCol(['date', 'publish', 'time', 'วันที่', 'เวลา']);
+    const findCol = kwList => headers.findIndex(h => kwList.some(k => h === k || h.includes(k)));
+    const idxTitle = findCol(['title', 'ชื่อ', 'หัวข้อ']);
+    const idxDesc  = findCol(['description', 'ข้อความ', 'แคปชัน', 'post']);
+    const idxDate  = findCol(['publish time', 'date', 'วันที่', 'เวลา']);
     const idxReach = findCol(['reach', 'การเข้าถึง']);
-    const idxViews = findCol(['view', 'impressions', 'play', 'การรับชม', 'ยอดวิว', 'อิมเพรสชัน']);
-    const idxEng   = findCol(['engagement', 'interaction', 'reaction', 'การมีส่วนร่วม', 'ถูกใจ']);
-    const idxShare = findCol(['share', 'save', 'แชร์', 'บันทึก']);
-    const idxMsg   = findCol(['message', 'messaging', 'conversation', 'dm', 'ข้อความ', 'ทัก']);
-    const idxLead  = findCol(['lead', 'purchase', 'registration', 'conversion', 'result', 'สมัคร', 'ผลลัพธ์', 'จอง']);
+    const idxViews = findCol(['views', 'view', 'impressions', 'play', 'การรับชม', 'ยอดวิว']);
+    const idxEng   = findCol(['reactions, comments and shares', 'engagement', 'interaction', 'การมีส่วนร่วม']);
+    const idxShare = findCol(['shares', 'share', 'save', 'แชร์']);
+    const idxMsg   = findCol(['message', 'messaging', 'conversation', 'dm', 'ทัก']);
+    const idxLead  = findCol(['total clicks', 'lead', 'purchase', 'registration', 'conversion', 'สมัคร', 'ผลลัพธ์']);
     const idxLink  = findCol(['permalink', 'link', 'url', 'ลิงก์']);
 
-    let matchedCount = 0;
+    let matchedCount = 0, createdCount = 0;
     const toNum = val => { const n = parseFloat(String(val||'').replace(/,/g,'')); return isNaN(n) ? 0 : n; };
 
     dataRows.forEach(r => {
-      const titleVal = idxTitle >= 0 ? (r[idxTitle] || '') : '';
-      const dateRaw  = idxDate >= 0 ? (r[idxDate] || '') : '';
-      let isoMatch = '';
-      const dm = /(\d{4})[-/](\d{1,2})[-/](\d{1,2})/.exec(dateRaw) || /(\d{1,2})[-/](\d{1,2})[-/](\d{4})/.exec(dateRaw);
-      if(dm){
-        isoMatch = dm[1].length===4 ? `${dm[1]}-${dm[2].padStart(2,'0')}-${dm[3].padStart(2,'0')}` : `${dm[3]}-${dm[2].padStart(2,'0')}-${dm[1].padStart(2,'0')}`;
+      const rawTitle = (idxTitle >= 0 && r[idxTitle]) ? r[idxTitle] : ((idxDesc >= 0 && r[idxDesc]) ? r[idxDesc] : '');
+      const cleanTitle = rawTitle.replace(/\s+/g, ' ').trim().slice(0, 85);
+      const dateRaw = idxDate >= 0 ? (r[idxDate] || '') : '';
+      let isoMatch = tdy();
+      const dmYMD = /(\d{4})[-/](\d{1,2})[-/](\d{1,2})/.exec(dateRaw);
+      const dmMDY = /(\d{1,2})[-/](\d{1,2})[-/](\d{4})/.exec(dateRaw);
+      if(dmYMD){
+        isoMatch = `${dmYMD[1]}-${dmYMD[2].padStart(2,'0')}-${dmYMD[3].padStart(2,'0')}`;
+      } else if(dmMDY){
+        // รองรับรูปแบบ MM/DD/YYYY ของ Meta CSV
+        const p1 = +dmMDY[1], p2 = +dmMDY[2], yr = dmMDY[3];
+        const mm = p1 > 12 ? p2 : p1;
+        const dd = p1 > 12 ? p1 : p2;
+        isoMatch = `${yr}-${String(mm).padStart(2,'0')}-${String(dd).padStart(2,'0')}`;
       }
-      // พยายามจับคู่กับโพสต์ในระบบ
-      let targetPost = P.find(p => (titleVal && p.t && (titleVal.includes(p.t) || p.t.includes(titleVal.slice(0,20)))) || (isoMatch && p.iso === isoMatch));
-      if(targetPost){
-        const m = C.met[targetPost.n] = C.met[targetPost.n] || {};
-        if(idxReach >= 0 && toNum(r[idxReach])) m.rc = toNum(r[idxReach]);
-        if(idxViews >= 0 && toNum(r[idxViews])) m.vw = toNum(r[idxViews]);
-        if(idxEng >= 0   && toNum(r[idxEng]))   m.en = toNum(r[idxEng]);
-        if(idxShare >= 0 && toNum(r[idxShare])) m.ss = toNum(r[idxShare]);
-        if(idxMsg >= 0   && toNum(r[idxMsg]))   m.dm = toNum(r[idxMsg]);
-        if(idxLead >= 0  && toNum(r[idxLead]))  m.rg = toNum(r[idxLead]);
-        if(idxLink >= 0  && r[idxLink] && r[idxLink].startsWith('http')) targetPost.url = r[idxLink];
+
+      const linkVal = (idxLink >= 0 && r[idxLink] && r[idxLink].startsWith('http')) ? r[idxLink].trim() : '';
+      if(!cleanTitle && !linkVal) return;
+
+      let targetPost = P.find(p => (linkVal && p.url === linkVal) || (cleanTitle && p.t && p.t === esc(cleanTitle)));
+      if(!targetPost){
+        targetPost = newPost(cleanTitle || ('โพสต์วันที่ ' + isoMatch), isoMatch, 'aw');
+        targetPost.s = 4;
+        S.done.add(targetPost.n);
+        createdCount++;
+      } else {
         matchedCount++;
       }
+
+      if(linkVal) targetPost.url = linkVal;
+      const m = C.met[targetPost.n] = C.met[targetPost.n] || {};
+      if(idxReach >= 0) m.rc = toNum(r[idxReach]);
+      if(idxViews >= 0) m.vw = toNum(r[idxViews]);
+      if(idxEng >= 0)   m.en = toNum(r[idxEng]);
+      if(idxShare >= 0) m.ss = toNum(r[idxShare]);
+      if(idxMsg >= 0)   m.dm = toNum(r[idxMsg]);
+      if(idxLead >= 0)  m.rg = toNum(r[idxLead]);
     });
 
-    // แสดงตารางพรีวิว CSV สูงสุด 8 แถวแรก
-    const previewCols = rows[0].slice(0, 7);
-    let tbl = `<div class="note" style="margin-bottom:6px;color:var(--cv);font-weight:600">✅ อ่านไฟล์ "${esc(file.name)}" สำเร็จ (${dataRows.length} แถว) · จับคู่เข้ากับโพสต์ในแดชบอร์ดอัตโนมัติ ${matchedCount} รายการ</div>`;
+    const previewCols = rows[0].slice(0, 8);
+    let tbl = `<div class="note" style="margin-bottom:6px;color:var(--cv);font-weight:600">✅ นำเข้าไฟล์ "${esc(file.name)}" สำเร็จ (${dataRows.length} แถว) · สร้างโพสต์ใหม่เข้าตาราง ${createdCount} โพสต์ และอัปเดตโพสต์เดิม ${matchedCount} โพสต์</div>`;
     tbl += `<div class="scroll"><table style="font-size:12px"><tr>${previewCols.map(c=>`<th>${esc(c)}</th>`).join('')}</tr>`;
     dataRows.slice(0, 8).forEach(r => {
-      tbl += `<tr>${previewCols.map((_,i)=>`<td>${esc((r[i]||'').slice(0,50))}</td>`).join('')}</tr>`;
+      tbl += `<tr>${previewCols.map((_,i)=>`<td>${esc((r[i]||'').slice(0,45))}</td>`).join('')}</tr>`;
     });
     tbl += `</table></div>`;
     $('csvSummary').innerHTML = tbl;
 
-    // ใส่ข้อมูล CSV ลงในกล่องวิเคราะห์ AI
-    $('mtP').value = `[ข้อมูลจากไฟล์ CSV: ${file.name}]\n` + rows.slice(0, 40).map(r => r.join(' | ')).join('\n');
-    logA(`อัปโหลดไฟล์ CSV "${file.name}" (${dataRows.length} แถว)`);
+    // คัดเฉพาะคอลัมน์สำคัญส่งให้ AI วิเคราะห์อย่างแม่นยำ
+    const slimLines = dataRows.slice(0, 35).map((r, idx) => {
+      const t = ((idxTitle>=0&&r[idxTitle])||(idxDesc>=0&&r[idxDesc])||'').replace(/\s+/g,' ').slice(0,60);
+      const dt = idxDate>=0 ? r[idxDate] : '';
+      const rc = idxReach>=0 ? r[idxReach] : 0;
+      const vw = idxViews>=0 ? r[idxViews] : 0;
+      const en = idxEng>=0 ? r[idxEng] : 0;
+      const sh = idxShare>=0 ? r[idxShare] : 0;
+      return `#${idx+1} [${dt}] "${t}" | Reach: ${rc}, Views: ${vw}, Engagements: ${en}, Shares: ${sh}`;
+    });
+    $('mtP').value = `[สรุปข้อมูลจากไฟล์ Meta CSV: ${file.name}]\n` + slimLines.join('\n');
+    logA(`นำเข้าไฟล์ CSV "${file.name}" (${dataRows.length} รายการ)`);
     ch();
-    toast(`นำเข้า CSV สำเร็จ (${dataRows.length} แถว) กดปุ่ม Analyze results เพื่อให้ AI วิเคราะห์ได้เลย`);
+    toast(`นำเข้าโพสต์จาก CSV ลงตารางสำเร็จ ${createdCount + matchedCount} รายการ!`);
   };
   reader.readAsText(file);
 };
-
 $('csvClearBtn').onclick = () => {
   $('csvFile').value = '';
   $('csvSummary').innerHTML = '';
