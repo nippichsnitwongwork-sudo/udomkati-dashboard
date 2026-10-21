@@ -1,8 +1,0 @@
-{
-  "name": "udomkati-dashboard",
-  "version": "1.0.0",
-  "private": true,
-  "description": "Marketing plan and content operations dashboard for Udomkati Brewing Academy",
-  "scripts": { "test": "node tests/run.js" },
-  "devDependencies": { "jsdom": "^30.1.3" }
-}
