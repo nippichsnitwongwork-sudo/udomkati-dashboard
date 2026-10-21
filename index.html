@@ -444,6 +444,13 @@ const firebaseConfig = {
 };
 
 let fbDb = null, fbAuth = null;
+var UNSUB = [];
+function listen(path, cb, err){ const r = fbDb.ref(path), h = r.on('value', cb, err); UNSUB.push(() => r.off('value', h)); }
+function stopRealtime(){
+  UNSUB.forEach(f => { try{ f(); }catch(e){} }); UNSUB = [];
+  DBS.ready = false; DBS.last = {}; DBS.rs = undefined;
+  ME.name = ''; ME.host = false; ME.role = 'viewer'; ME.routed = false; ME._pc = 0; ME._pk = ''; ME.uid = null; ME.email = '';
+}
 try {
   firebase.initializeApp(firebaseConfig);
   fbDb = firebase.database();
@@ -464,7 +471,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const invitedRoleName = urlParams.get('invite') || '';
 if(invitedRoleName){
   const ib = document.getElementById('inviteBanner');
-  if(ib) ib.innerHTML = `📩 <b>คุณได้รับคำเชิญให้เข้าสู่ตำแหน่ง: "${invitedRoleName}"</b><br>กรุณาเข้าสู่ระบบด้วยอีเมลของคุณเพื่อเริ่มทำงานทันที`;
+  if(ib) ib.textContent = '📩 คุณได้รับคำเชิญให้เข้าสู่ตำแหน่ง: "' + invitedRoleName + '" กรุณาเข้าสู่ระบบด้วยอีเมลของคุณเพื่อเริ่มทำงานทันที';
 }
 
 const ST={aw:'Awareness',co:'Consideration',cv:'Conversion'};
@@ -480,8 +487,8 @@ const cssv=k=>`var(--${k})`;
 
 // 3. ระบบ AI (เชื่อมผ่าน Gemini API พร้อม Fallback)
 let GEMINI_KEY = localStorage.getItem('udk_gemini_key') || '';
-if(fbDb){
-  fbDb.ref('udk/config/geminiKey').on('value', s => {
+function startGemini(){
+  if(fbDb) listen('udk/config/geminiKey', s => {
     if(s.val()){ GEMINI_KEY = s.val(); localStorage.setItem('udk_gemini_key', GEMINI_KEY); }
   });
 }
@@ -508,7 +515,7 @@ async function callGeminiJSON(promptText) {
   let lastErr = null;
   for (const m of models) {
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${encodeURIComponent(GEMINI_KEY)}`;
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`;
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-goog-api-key': GEMINI_KEY },
@@ -620,7 +627,7 @@ function os(){
  $('oT').querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{S.os=b.dataset.v;os()});
  $('oSB').onclick=()=>{if(!perm('edit')){deny();return}const n=$('oSN').value.trim();if(!n){$('oSN').focus();return}const k='u'+Date.now();C.xs.push({k,l:n});C.ox[k]=[];S.os=k;logA('Added checklist "'+n+'"');sv();os()};
  $('oL').innerHTML=(cur?all.map(x=>{const dn=S.od.has(x.k);return `<label class="task${dn?' done':''}"><input type="checkbox" data-k="${x.k}" ${dn?'checked':''}><span class="tx">${x.t}</span><button type="button" class="btn" data-xd="${x.k}" aria-label="Delete item">Delete</button></label>`}).join('')+(all.length?'':'<div class="empty">This checklist is empty. Add an item below.</div>')+'<div class="addrow"><input type="text" id="oIN" placeholder="Add a shot or interview item" aria-label="New checklist item"><button type="button" class="btn" id="oIB">Add item</button><button type="button" class="btn" id="oSD">Delete this checklist</button></div>':'<div class="empty">No checklists. Add a new checklist above'+(dirty?' or restore the defaults':'')+'.</div>')+(dirty?'<div class="addrow"><button type="button" class="btn" id="oRS">Restore default checklists</button></div>':'');
- $('oL').querySelectorAll('input[type=checkbox]').forEach(c=>c.onchange=()=>{c.checked?S.od.add(c.dataset.k):S.od.delete(c.dataset.k);sv();os()});
+ $('oL').querySelectorAll('input[type=checkbox]').forEach(c=>c.onchange=()=>{if(!perm('edit')){deny();os();return}c.checked?S.od.add(c.dataset.k):S.od.delete(c.dataset.k);sv();os()});
  $('oL').querySelectorAll('[data-xd]').forEach(b=>b.onclick=e=>{e.preventDefault();if(!perm('edit')){deny();return}const k=b.dataset.xd,m=/^(.+)-([bc])(\d+)$/.exec(k);if(!m)return;const ix=+m[3];
   if(m[2]==='b'){(C.hi[S.os]=C.hi[S.os]||[]).push(ix);S.od.delete(k)}
   else{const n=(C.ox[S.os]||[]).length,fl=[];for(let j=0;j<n;j++){fl.push(S.od.has(S.os+'-c'+j));S.od.delete(S.os+'-c'+j)}fl.splice(ix,1);fl.forEach((v,j)=>v&&S.od.add(S.os+'-c'+j));C.ox[S.os].splice(ix,1)}
@@ -691,7 +698,7 @@ function sv(forceAll){
     writes++;
     DBS.saving++;
     setSaveStatus('🔄 กำลังบันทึกอัตโนมัติ (Auto-saving)...', '#b8791f');
-    fbDb.ref('udk/'+k).set({j,by:actor,at:now}).then(()=>{
+    fbDb.ref('udk/'+k).set({j,by:actor,at:firebase.database.ServerValue.TIMESTAMP}).then(()=>{
       DBS.saving = Math.max(0, DBS.saving - 1);
       if(DBS.saving === 0){
         const tStr = new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
@@ -792,14 +799,14 @@ function who(by,at){
 // ระบบแสดงรายชื่อคนออนไลน์แบบสด (Realtime Presence)
 function updatePresence(){
   if(!fbDb || !ME.uid || !ME.email) return;
-  const pRef = fbDb.ref('udk_presence/' + ME.uid);
-  const info = { name: ME.name || ME.email, role: ME.role, email: ME.email, at: firebase.database.ServerValue.TIMESTAMP };
-  pRef.set(info).catch(()=>{});
-  pRef.onDisconnect().remove().catch(()=>{});
+  const p = fbDb.ref('udk_presence/' + ME.uid), k = ME.name + '|' + ME.role;
+  window._pi = { name: ME.name || ME.email, role: ME.role, email: ME.email, at: firebase.database.ServerValue.TIMESTAMP };
+  if(!ME._pc){ ME._pc = 1; listen('.info/connected', s => { if(s.val() === true) p.onDisconnect().remove().then(() => p.set(window._pi)).catch(()=>{}); }); }
+  if(ME._pk !== k){ ME._pk = k; p.set(window._pi).catch(()=>{}); }
 }
 
-if(fbDb){
-  fbDb.ref('udk_presence').on('value', s => {
+function startPresence(){
+  if(fbDb) listen('udk_presence', s => {
     const val = s.val() || {};
     const names = Object.values(val).map(u => `🟢 ${u.name}`);
     const bar = $('onlineUsersBar');
@@ -816,7 +823,7 @@ async function dbInit(){
   }
   DBS.db = fbDb;
   let first = true;
-  fbDb.ref('udk').on('value', s => {
+  listen('udk', s => {
     const val = s.val() || {};
     let ch = 0, at = 0, by = null;
     C.rq = [];
@@ -1402,14 +1409,20 @@ $('sendReqBtn').onclick = () => {
 // ฟังก์ชันเริ่มเชื่อมต่อฐานข้อมูลใหม่ทันทีหลัง Login สำเร็จ
 if(fbAuth){
   fbAuth.onAuthStateChanged(user => {
+    stopRealtime();
+    if(user && !user.emailVerified){
+      user.sendEmailVerification().catch(()=>{});
+      const em0 = user.email;
+      fbAuth.signOut().then(() => { $('authErr').style.color = 'var(--cv)'; $('authErr').textContent = 'ส่งลิงก์ยืนยันอีเมลไปที่ ' + em0 + ' แล้ว กรุณากดยืนยันในอีเมล (ดูใน Junk ด้วย) แล้วเข้าสู่ระบบอีกครั้ง'; });
+      return;
+    }
     if(user){
       DBS.uid = user.uid;
       ME.uid = user.uid;
       ME.email = (user.email || '').toLowerCase();
       // บังคับปลดล็อกให้เข้าหน้าเลือกตำแหน่งได้ทันที แม้ฐานข้อมูลกำลังโหลด
-      DBS.ready = true;
       dbInit();
-      meUpdate();
+      startGemini(); startPresence();
       refresh();
     } else {
       ME.uid = null; ME.email = ''; ME.name = ''; ME.host = false; ME.routed = false;
@@ -1420,25 +1433,26 @@ if(fbAuth){
   });
 }
 
-$('googleLoginBtn').onclick = async () => {$('authErr').textContent = 'กำลังเปิดหน้าต่าง Google...';
+$('googleLoginBtn').onclick = async () => {$('authErr').style.color = 'var(--bad)'; $('authErr').textContent = 'กำลังเปิดหน้าต่าง Google...';
   try {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
     await fbAuth.signInWithPopup(provider);
   } catch(e) {
     // หากป๊อปอัปค้างหรือถูกบล็อก ให้สลับไปใช้วิธี Redirect แทนอัตโนมัติ
-    if(e && (e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request')){
+    if(e && (e.code === 'auth/popup-blocked' || e.code === 'auth/cancelled-popup-request')){
       try {
         const provider = new firebase.auth.GoogleAuthProvider();
         await fbAuth.signInWithRedirect(provider);
         return;
       } catch(err2) {}
     }
-    $('authErr').textContent = 'เข้าด้วยป๊อปอัปไม่สำเร็จ กรุณาใช้อีเมลและรหัสผ่านด้านล่างแทน (' + (e.code || e.message) + ')';
+    const M = {'auth/unauthorized-domain':'โดเมนนี้ยังไม่ได้เพิ่มใน Firebase > Authentication > Settings > Authorized domains','auth/operation-not-allowed':'ยังไม่ได้เปิด Google ใน Sign-in method','auth/popup-closed-by-user':'ปิดหน้าต่าง Google ก่อนเข้าสู่ระบบเสร็จ','auth/operation-not-supported-in-this-environment':'เบราว์เซอร์/ที่เปิดไฟล์นี้ไม่รองรับ (ต้องเปิดผ่านลิงก์ https ใน Chrome/Safari)'};
+    $('authErr').textContent = (M[e.code] || 'เข้าสู่ระบบด้วย Google ไม่สำเร็จ') + ' (' + (e.code || e.message) + ')';
   }
 };
 
-$('emLoginBtn').onclick = async () => {$('authErr').textContent = 'กำลังเข้าสู่ระบบ...';
+$('emLoginBtn').onclick = async () => {$('authErr').style.color = 'var(--bad)'; $('authErr').textContent = 'กำลังเข้าสู่ระบบ...';
   const em = $('emIn').value.trim().toLowerCase(), pw =$('pwIn').value;
   if(!em || !pw){ $('authErr').textContent = 'กรุณากรอกอีเมลและรหัสผ่าน'; return; }
   try {
@@ -1452,7 +1466,7 @@ $('emLoginBtn').onclick = async () => {$('authErr').textContent = 'กำลั�
   }
 };
 
-$('emRegBtn').onclick = async () => {$('authErr').textContent = 'กำลังตรวจสอบบัญชี...';
+$('emRegBtn').onclick = async () => {$('authErr').style.color = 'var(--bad)'; $('authErr').textContent = 'กำลังตรวจสอบบัญชี...';
   const em = $('emIn').value.trim().toLowerCase(), pw =$('pwIn').value;
   if(!em || pw.length < 6){ $('authErr').textContent = 'กรุณากรอกอีเมล และตั้งรหัสผ่านอย่างน้อย 6 ตัวอักษร'; return; }
   try {
@@ -1623,7 +1637,10 @@ chips('fL',[['all','ทั้งหมด'],['yes','🔗 มีลิงก์�
 $('q').oninput=e=>{S.q=e.target.value.trim();render()};
 ['sN','sA','sC'].forEach(i=>$(i).oninput=sim);
 $('theme').onclick=()=>{const r=document.documentElement,d=getComputedStyle(r).getPropertyValue('--bg').trim()==='#1d1812';r.dataset.theme=d?'light':'dark'};
-persona();sim();dbInit();
+persona();sim();
+if(!fbDb) dbInit();
+if(/Line\/|FBAN|FBAV|Instagram/i.test(navigator.userAgent)) $('authErr').textContent = 'เปิดลิงก์นี้ด้วย Chrome หรือ Safari แล้วค่อยเข้าสู่ระบบด้วย Google (LINE บล็อกการ Login ของ Google)';
+if(fbAuth) fbAuth.getRedirectResult().catch(e => { $('authErr').textContent = 'เข้าสู่ระบบไม่สำเร็จ (' + (e.code || e.message) + ')'; });
 </script>
 </body>
 </html>
