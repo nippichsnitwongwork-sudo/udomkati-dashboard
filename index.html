@@ -1399,48 +1399,82 @@ $('sendReqBtn').onclick = () => {
   });
 };
 
+// ฟังก์ชันเริ่มเชื่อมต่อฐานข้อมูลใหม่ทันทีหลัง Login สำเร็จ
 if(fbAuth){
   fbAuth.onAuthStateChanged(user => {
     if(user){
       DBS.uid = user.uid;
       ME.uid = user.uid;
-      ME.email = user.email || '';
-      if(DBS.ready){ meUpdate(); refresh(); }
+      ME.email = (user.email || '').toLowerCase();
+      // บังคับปลดล็อกให้เข้าหน้าเลือกตำแหน่งได้ทันที แม้ฐานข้อมูลกำลังโหลด
+      DBS.ready = true;
+      dbInit();
+      meUpdate();
+      refresh();
     } else {
       ME.uid = null; ME.email = ''; ME.name = ''; ME.host = false; ME.routed = false;
       $('authOverlay').style.display = 'flex';
-      $('loginStep').style.display = 'block';
-      $('claimStep').style.display = 'none';
-      $('myRoleBanner').style.display = 'none';
-      $('userBadge').textContent = 'ยังไม่เข้าสู่ระบบ';
+      $('loginStep').style.display = 'block';$('claimStep').style.display = 'none';
+      $('myRoleBanner').style.display = 'none';$('userBadge').textContent = 'ยังไม่เข้าสู่ระบบ';
     }
   });
 }
 
-$('googleLoginBtn').onclick = async () => {
-  $('authErr').textContent = '';
+$('googleLoginBtn').onclick = async () => {$('authErr').textContent = 'กำลังเปิดหน้าต่าง Google...';
   try {
     const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
     await fbAuth.signInWithPopup(provider);
   } catch(e) {
-    $('authErr').textContent = 'เข้าสู่ระบบไม่สำเร็จ: ' + (e.message || e.code);
+    // หากป๊อปอัปค้างหรือถูกบล็อก ให้สลับไปใช้วิธี Redirect แทนอัตโนมัติ
+    if(e && (e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request')){
+      try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        await fbAuth.signInWithRedirect(provider);
+        return;
+      } catch(err2) {}
+    }
+    $('authErr').textContent = 'เข้าด้วยป๊อปอัปไม่สำเร็จ กรุณาใช้อีเมลและรหัสผ่านด้านล่างแทน (' + (e.code || e.message) + ')';
   }
 };
 
-$('emLoginBtn').onclick = async () => {
-  $('authErr').textContent = '';
-  const em = $('emIn').value.trim(), pw = $('pwIn').value;
+$('emLoginBtn').onclick = async () => {$('authErr').textContent = 'กำลังเข้าสู่ระบบ...';
+  const em = $('emIn').value.trim().toLowerCase(), pw =$('pwIn').value;
   if(!em || !pw){ $('authErr').textContent = 'กรุณากรอกอีเมลและรหัสผ่าน'; return; }
-  try { await fbAuth.signInWithEmailAndPassword(em, pw); }
-  catch(e) { $('authErr').textContent = 'เข้าสู่ระบบไม่สำเร็จ: ' + (e.message || e.code); }
+  try {
+    await fbAuth.signInWithEmailAndPassword(em, pw);
+  } catch(e) {
+    if(e && (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential')){
+      $('authErr').textContent = 'รหัสผ่านไม่ถูกต้อง หรือยังไม่ได้ลงทะเบียนอีเมลนี้ (หากเพิ่งเข้าครั้งแรกให้กดปุ่ม "ลงทะเบียนใหม่")';
+    } else {
+      $('authErr').textContent = 'เข้าสู่ระบบไม่สำเร็จ: ' + (e.message || e.code);
+    }
+  }
 };
 
-$('emRegBtn').onclick = async () => {
-  $('authErr').textContent = '';
-  const em = $('emIn').value.trim(), pw = $('pwIn').value;
-  if(!em || pw.length < 6){ $('authErr').textContent = 'กรุณากรอกอีเมล และรหัสผ่านอย่างน้อย 6 ตัวอักษร'; return; }
-  try { await fbAuth.createUserWithEmailAndPassword(em, pw); }
-  catch(e) { $('authErr').textContent = 'ลงทะเบียนไม่สำเร็จ: ' + (e.message || e.code); }
+$('emRegBtn').onclick = async () => {$('authErr').textContent = 'กำลังตรวจสอบบัญชี...';
+  const em = $('emIn').value.trim().toLowerCase(), pw =$('pwIn').value;
+  if(!em || pw.length < 6){ $('authErr').textContent = 'กรุณากรอกอีเมล และตั้งรหัสผ่านอย่างน้อย 6 ตัวอักษร'; return; }
+  try {
+    await fbAuth.createUserWithEmailAndPassword(em, pw);
+  } catch(e) {
+    // หากอีเมลนี้เคยลงทะเบียนไว้แล้ว ให้สลับไปล็อกอินให้อัตโนมัติทันที!
+    if(e && e.code === 'auth/email-already-in-use'){
+      try {
+        await fbAuth.signInWithEmailAndPassword(em, pw);
+        return;
+      } catch(loginErr) {
+        $('authErr').innerHTML = `อีเมล <b>${esc(em)}</b> ลงทะเบียนไว้แล้ว แต่รหัสผ่านไม่ตรงกับที่เคยตั้งไว้ <button type="button" class="btn keep" id="resetPwBtn" style="margin-top:6px;font-size:12px">📩 กดที่นี่เพื่อส่งลิงก์ตั้งรหัสผ่านใหม่ไปที่อีเมล</button>`;
+        if($('resetPwBtn'))$('resetPwBtn').onclick = () => {
+          fbAuth.sendPasswordResetEmail(em).then(()=>{
+            $('authErr').style.color = 'var(--cv)';$('authErr').textContent = '✅ ส่งลิงก์รีเซ็ตรหัสผ่านไปที่ ' + em + ' แล้ว กรุณาเช็กในกล่องจดหมายหรือ Junk mail';
+          }).catch(err => { $('authErr').textContent = 'ส่งอีเมลไม่สำเร็จ: ' + err.message; });
+        };
+        return;
+      }
+    }
+    $('authErr').textContent = 'ลงทะเบียนไม่สำเร็จ: ' + (e.message || e.code);
+  }
 };
 
 const doLogout = () => {
