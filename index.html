@@ -19,7 +19,7 @@ h1{font-size:26px;margin:0 0 4px;color:var(--ink);letter-spacing:-.01em}
 h2{font-size:18px;margin:0 0 12px;color:var(--ink)}
 .sub{color:var(--muted);margin:0}
 button,select,input{font:inherit;color:inherit}
-.btn{background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+.btn{background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
 .btn:focus-visible,.chip:focus-visible,summary:focus-visible,input:focus-visible{outline:2px solid var(--aw);outline-offset:2px}
 .grid{display:grid;gap:14px}
 .kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:14px}
@@ -49,7 +49,7 @@ input[type=search]{background:var(--card);border:1px solid var(--line);border-ra
 .post[open] summary{border-bottom:1px solid var(--line)}
 .post.done .tt{text-decoration:line-through;color:var(--muted)}
 .tt{font-weight:600;flex:1 1 240px}
-.tag{font-size:12px;border-radius:6px;padding:1px 8px;border:1px solid currentColor;white-space:nowrap}
+.tag{font-size:12px;border-radius:6px;padding:1px 8px;border:1px solid currentColor;white-space:nowrap;text-decoration:none}
 .t-aw{color:var(--aw)}.t-co{color:var(--co)}.t-cv{color:var(--cv)}
 .pp{background:var(--chip);color:var(--text);border:none;font-weight:600}
 .body{padding:10px 14px 12px;display:grid;gap:6px;font-size:14px}
@@ -87,14 +87,15 @@ section{margin-bottom:14px}
 .tray{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;min-height:30px;padding:6px;border:1px dashed var(--line);border-radius:8px}
 .tray .pill{max-width:260px}
 #cdet .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
-#cdet input[type=text],#cdet input[type=date],#cdet select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+#cdet input[type=text],#cdet input[type=url],#cdet input[type=date],#cdet select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
 @media(max-width:560px){.pill .pt{display:none}.cell{min-height:64px}.pill{padding:2px}}
 .addrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
 .addrow input,.addrow select,textarea{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
 textarea{width:100%;resize:vertical}
 .task .btn{padding:2px 8px;font-size:12px}
 .ro .btn:not(.keep),.ro input:not(.keep),.ro select:not(.keep),.ro textarea:not(.keep){opacity:.55;pointer-events:none}
-#mtT{font-size:13px}#mtT th,#mtT td{padding:4px 6px;white-space:nowrap;text-align:left}#mtT input{width:72px;padding:3px 5px;background:var(--card);border:1px solid var(--line);border-radius:6px}
+#mtT{font-size:13px}#mtT th,#mtT td{padding:4px 6px;white-space:nowrap;text-align:left}#mtT input[type=number]{width:68px;padding:3px 5px;background:var(--card);border:1px solid var(--line);border-radius:6px}
+#mtT input[type=url]{width:130px;padding:3px 5px;background:var(--card);border:1px solid var(--line);border-radius:6px;font-size:12px}
 #tmT td,#tmT th{padding:6px 8px}select{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:2px 4px;max-width:160px}
 #toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;z-index:200;display:none;max-width:90%;font-size:14px}
 @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}.wrap>*{display:none!important}.wrap>#calsec{display:block!important}#calsec .note,#calsec .btn,#cdet,#ctray,#cF{display:none!important}.pill{white-space:normal}}
@@ -110,13 +111,13 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:-6px 0 14px}
 .cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:10px}
 .cc{border:1px solid var(--line);border-top:5px solid var(--c);border-radius:10px;padding:10px;background:var(--card);cursor:pointer}
 .cc:hover{background:var(--chip)}
-/* Login Overlay Styles */
 #authOverlay{position:fixed;inset:0;background:rgba(25,18,12,.88);backdrop-filter:blur(6px);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
 .authBox{background:var(--card);border:1px solid var(--line);border-radius:16px;max-width:480px;width:100%;padding:24px;box-shadow:0 12px 32px rgba(0,0,0,.35)}
 .roleCard{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:var(--bg);cursor:pointer}
 .roleCard:hover{border-color:var(--co);background:var(--chip)}
 .aiLinks{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 .aiLinks a{text-decoration:none;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.csvBox{border:2px dashed var(--co);border-radius:12px;padding:14px;background:var(--bg);margin:10px 0}
 </style>
 </head>
 <body>
@@ -126,14 +127,14 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:-6px 0 14px}
   <div class="authBox" id="loginStep">
     <h2 style="margin-top:0">Udomkati Brewing Academy</h2>
     <p class="note" style="margin-bottom:16px">กรุณาเข้าสู่ระบบด้วยอีเมลเพื่อตรวจสอบสิทธิ์และตำแหน่งงานในทีม</p>
-    <button type="button" class="btn keep" id="googleLoginBtn" style="width:100%;padding:10px;font-weight:600;background:#3b2a1a;color:#fff;margin-bottom:12px">🔐 เข้าสู่ระบบด้วย Google (Gmail)</button>
+    <button type="button" class="btn keep" id="googleLoginBtn" style="width:100%;padding:10px;font-weight:600;background:#3b2a1a;color:#fff;margin-bottom:12px;justify-content:center">🔐 เข้าสู่ระบบด้วย Google (Gmail)</button>
     <div style="border-top:1px solid var(--line);margin:14px 0;padding-top:12px">
       <div class="note" style="margin-bottom:6px">หรือเข้าสู่ระบบด้วยอีเมล / รหัสผ่าน:</div>
       <input type="email" class="keep" id="emIn" placeholder="อีเมลของคุณ" style="width:100%;padding:8px;margin-bottom:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg)">
       <input type="password" class="keep" id="pwIn" placeholder="รหัสผ่าน (อย่างน้อย 6 ตัวอักษร)" style="width:100%;padding:8px;margin-bottom:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg)">
       <div style="display:flex;gap:8px">
-        <button type="button" class="btn keep" id="emLoginBtn" style="flex:1">เข้าสู่ระบบ</button>
-        <button type="button" class="btn keep" id="emRegBtn" style="flex:1">ลงทะเบียนใหม่</button>
+        <button type="button" class="btn keep" id="emLoginBtn" style="flex:1;justify-content:center">เข้าสู่ระบบ</button>
+        <button type="button" class="btn keep" id="emRegBtn" style="flex:1;justify-content:center">ลงทะเบียนใหม่</button>
       </div>
     </div>
     <p class="note" id="authErr" style="color:var(--bad);margin-top:10px"></p>
@@ -144,7 +145,7 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:-6px 0 14px}
     <p class="note" id="claimEmailTxt" style="margin-bottom:12px"></p>
     <p class="note" style="margin-bottom:10px">คลิกเลือกชื่อของคุณเพื่อผูกกับอีเมลนี้ถาวร:</p>
     <div id="roleList"></div>
-    <button type="button" class="btn keep" id="logoutBtn2" style="margin-top:10px;width:100%">ออกจากระบบ / เปลี่ยนอีเมล</button>
+    <button type="button" class="btn keep" id="logoutBtn2" style="margin-top:10px;width:100%;justify-content:center">ออกจากระบบ / เปลี่ยนอีเมล</button>
   </div>
 </div>
 
@@ -165,11 +166,12 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:-6px 0 14px}
 <nav class="nv" aria-label="Sections">
   <button type="button" class="chip keep" data-go="alsec">Overview</button>
   <button type="button" class="chip keep" data-go="calsec">Calendar</button>
+  <button type="button" class="chip keep" data-go="postsec">🔗 ติดตามโพสต์</button>
   <button type="button" class="chip keep" data-go="tpsec">Tasks &amp; Templates</button>
   <button type="button" class="chip keep" data-go="pjsec">Projects</button>
   <button type="button" class="chip keep" data-go="plsec">🤖 AI Planner</button>
   <button type="button" class="chip keep" data-go="aisec">🤖 AI Persona</button>
-  <button type="button" class="chip keep" data-go="mtsec">Insights &amp; Ads</button>
+  <button type="button" class="chip keep" data-go="mtsec">📂 วิเคราะห์ CSV &amp; Ads</button>
   <button type="button" class="chip keep" data-go="tmsec">Team &amp; Roles</button>
 </nav>
 
@@ -221,11 +223,12 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:-6px 0 14px}
   <div class="card" id="cdet"></div>
 </section>
 
-<section class="card">
-  <h2>Content Posts · รายการโพสต์และบทความ (ลูกตาล วางตาราง / ลูกปลา ลงโพสต์)</h2>
+<section class="card" id="postsec">
+  <h2>Content Posts &amp; Live Tracker · รายการโพสต์และติดตามลิงก์โพสต์จริง (ลูกตาล / ลูกปลา)</h2>
   <div class="filters">
     <div class="fg" id="fF"><span>ช่วง Funnel</span></div>
     <div class="fg" id="fP"><span>Persona</span></div>
+    <div class="fg" id="fL"><span>สถานะลิงก์</span></div>
     <input class="keep" type="search" id="q" placeholder="ค้นหาหัวข้อหรือฮุก" aria-label="ค้นหา">
   </div>
   <div class="note" id="prog-t"></div>
@@ -238,7 +241,7 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:-6px 0 14px}
   <div class="cats" id="tpCats"></div>
   <div class="addrow"><label>Category <select id="tpC" aria-label="Category"></select></label><label>Launch Day (T-0) <input type="date" id="tpD"></label><label>Campaign name <input type="text" id="tpN" placeholder="e.g. VLB Masterclass Nov" aria-label="Campaign name"></label><button type="button" class="btn" id="tpP">Preview schedule</button></div>
   <div id="tpR"></div>
-  <p class="note">Dates are calculated from Launch Day (T-0). Tasks whose collaborator list includes แมท or แม็ค are flagged as Needs approval.</p>
+  <p class="note">Dates are calculated from Launch Day (T-0). Tasks whose collaborator list includes แมท or แม็ก are flagged as Needs approval.</p>
 </section>
 
 <section class="card">
@@ -280,12 +283,28 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:-6px 0 14px}
 </section>
 
 <section class="card" id="mtsec">
-  <h2>Performance &amp; AI Insights · อัปเดตยอดสมัคร &amp; วิเคราะห์แอด (ลูกปลา / เพียว)</h2>
-  <p class="note">ลูกปลา: อัปเดตข้อความทักและยอดสมัคร/จอง · เพียว: อัปเดตตัวเลข Reach, Views, Engagement และกดให้ AI วิเคราะห์ปรับแอด</p>
-  <label class="note"><input type="checkbox" class="keep" id="mtAll"> แสดงทุกโพสต์ (ค่าเริ่มต้นแสดงเฉพาะที่ถึงวันลงแล้ว)</label>
+  <h2>Performance, CSV Analytics &amp; Post Tracking · อัปโหลด CSV &amp; วิเคราะห์ผล (ลูกปลา / เพียว)</h2>
+  <p class="note">ลูกปลา: วางลิงก์โพสต์จริงและอัปเดตยอดสมัคร · เพียว: อัปโหลดไฟล์ CSV จาก Meta Business Suite / Ads Manager / TikTok เพื่อดึงตัวเลขเข้าตารางและให้ AI วิเคราะห์</p>
+  
+  <!-- กล่องอัปโหลดไฟล์ CSV -->
+  <div class="csvBox">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div>
+        <b>📂 นำเข้าไฟล์ CSV ผลลัพธ์คอนเทนต์ / โฆษณา (Meta / TikTok / Custom CSV)</b>
+        <div class="note">รองรับไฟล์ .csv ทุกชนิด ระบบจะสรุปข้อมูลและจับคู่ตัวเลขเข้ากับโพสต์ในตารางอัตโนมัติ (ตามวันที่หรือชื่อโพสต์)</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <input type="file" id="csvFile" accept=".csv,text/csv" class="keep" style="font-size:13px;max-width:230px">
+        <button type="button" class="btn keep" id="csvClearBtn">ล้างข้อมูล CSV</button>
+      </div>
+    </div>
+    <div id="csvSummary" style="margin-top:10px"></div>
+  </div>
+
+  <label class="note" style="display:block;margin:10px 0 6px"><input type="checkbox" class="keep" id="mtAll"> แสดงทุกโพสต์ (ค่าเริ่มต้นแสดงเฉพาะที่ถึงวันลงแล้ว)</label>
   <div class="scroll"><table id="mtT"></table></div>
-  <textarea id="mtP" rows="4" placeholder="วางข้อมูลเพิ่มเติมจาก Meta Ads Manager หรือ TikTok Analytics เพื่อให้ AI ช่วยวิเคราะห์ (ไม่บังคับ)" aria-label="ข้อมูลที่ส่งออก"></textarea>
-  <div class="addrow"><button type="button" class="btn" id="mtB">✨ Analyze results &amp; recommend adjustments</button><span class="note" id="mtS" role="status"></span></div>
+  <textarea id="mtP" rows="4" style="margin-top:10px" placeholder="ข้อมูลจากไฟล์ CSV จะแสดงที่นี่อัตโนมัติ หรือวางข้อมูลเพิ่มเติมเพื่อให้ AI ช่วยวิเคราะห์..." aria-label="ข้อมูลที่ส่งออก"></textarea>
+  <div class="addrow"><button type="button" class="btn" id="mtB">✨ Analyze results &amp; recommend adjustments (วิเคราะห์ด้วย AI)</button><span class="note" id="mtS" role="status"></span></div>
   <div id="mtR"></div>
 </section>
 
@@ -294,7 +313,7 @@ nav.nv{display:flex;gap:6px;flex-wrap:wrap;margin:-6px 0 14px}
   <div class="note" id="meB" style="margin-bottom:8px;font-weight:600;color:var(--ink)"></div>
   <div id="rqL"></div>
   <div id="tmL" style="margin-bottom:8px"></div>
-  <div class="addrow" id="tmAddRow"><input type="text" id="tmN" placeholder="ชื่อผู้รับผิดชอบ" aria-label="ชื่อ"><input type="text" id="tmR" placeholder="ตำแหน่งหน้าที่" aria-label="ตำแหน่ง"><input type="email" id="tmE" placeholder="อีเมลสำหรับ Login" aria-label="อีเมล"><select id="tmP" aria-label="สิทธิ์"><option value="host">Host (ดูภาพรวม/บริหารทั้งหมด)</option><option value="editor">Editor (สร้าง/แก้ไขงานและโพสต์ได้)</option><option value="own">Assignee (แก้เฉพาะงานตัวเอง)</option><option value="viewer">Viewer (ดูอย่างเดียว)</option></select><button type="button" class="btn" id="tmB">Add / Update member</button></div>
+  <div class="addrow" id="tmAddRow"><input type="text" id="tmN" placeholder="ชื่อผู้รับผิดชอบ" aria-label="ชื่อ"><input type="text" id="tmR" placeholder="ตำแหน่งหน้าที่" aria-label="ตำแหน่ง"><input type="email" id="tmE" placeholder="อีเมลสำหรับ Login" aria-label="อีเมล"><select id="tmP" aria-label="สิทธิ์"><option value="host">Host (ดูภาพรวม)</option><option value="editor">Editor (สร้าง/แก้ไขงานและโพสต์ได้)</option><option value="own">Assignee (แก้เฉพาะงานตัวเอง)</option><option value="viewer">Viewer (ดูอย่างเดียว)</option></select><button type="button" class="btn" id="tmB">Add / Update member</button></div>
   <div class="scroll"><table id="tmT"></table></div>
   <h3 style="margin:12px 0 4px;font-size:15px">ประวัติการเปลี่ยนแปลงล่าสุด</h3><div id="lgL"></div>
 </section>
@@ -354,10 +373,10 @@ try {
   fbAuth = firebase.auth();
 } catch(e) { console.error("Firebase init error:", e); }
 
-// 2. โครงสร้างทีมงานเริ่มต้นทั้ง 5 ตำแหน่งตามโจทย์
+// 2. โครงสร้างทีมงานเริ่มต้นทั้ง 5 ตำแหน่ง
 const DEFAULT_TEAM = [
-  { n: 'แม็ก', r: 'ดูภาพรวม / ผู้บริหาร (Approve & Overview)', p: 'host', email: '', focus: 'all' },
-  { n: 'แมท', r: 'ดูภาพรวม / ผู้บริหาร (Approve & Overview)', p: 'host', email: '', focus: 'all' },
+  { n: 'แม็ก', r: 'ดูภาพรวม', p: 'host', email: '', focus: 'all' },
+  { n: 'แมท', r: 'ดูภาพรวม', p: 'host', email: '', focus: 'all' },
   { n: 'ลูกตาล', r: 'วางตาราง Content / นักเขียน (Content & Copywriter)', p: 'editor', email: '', focus: 'content' },
   { n: 'ลูกปลา', r: 'Admin ลงโพสต์ / อัปเดตยอดสมัคร / ทำคลิป', p: 'editor', email: '', focus: 'admin_video' },
   { n: 'เพียว', r: 'อัปเดตวิเคราะห์ / ยิง Ads (Ads & Data Analytics)', p: 'editor', email: '', focus: 'ads' }
@@ -370,11 +389,11 @@ A:{name:'A: ผู้ก่อตั้งโรงเบียร์',fear:['�
 B:{name:'B: โฮมบรูว์เออร์สายเทิร์นโปร',fear:['จ่ายแพงแต่ได้ความรู้ที่หาเองได้','ไม่รู้ Off-flavor ของตัวเอง','ต้มที่บ้านอร่อยแต่ขึ้นสเกลแล้วพัง'],hook:['คลิปแก้ปัญหาที่เจอจริง (กลิ่นเนย ฟองล้น)','Quiz ท้าทายความรู้','ASMR ระดับ Cinematic'],proof:['ความลึกวิทยาศาสตร์ที่เห็นก่อนจ่าย','พี่สนุก: กรรมการ Thailand Homebrew Cup 2026','รีวิวจากโฮมบรูว์เออร์ด้วยกัน']},
 C:{name:'C: เจ้าของคาเฟ่/บาร์',fear:['ลงทุนแล้วทำไม่ได้จริงหรือไม่คุ้ม','ปัญหากฎหมายเมื่อผลิตเองในร้าน','คุณภาพไม่นิ่ง กระทบชื่อร้าน'],hook:['ภาพเมนูที่ขายได้จริง','ตัวเลขต้นทุนและมาร์จิ้นที่ตรวจสอบได้','วันทำงานจริงของ Beertender'],proof:['เคสร้านที่ทำสำเร็จ','คอร์สสั้น เน้นลงมือทำ พร้อมสูตรตั้งต้น','คำตอบเรื่องใบอนุญาตที่ชัดเจน']}
 };
-const S={f:'all',p:'all',w:'all',q:'',done:new Set(),pt:'A'};
+const S={f:'all',p:'all',w:'all',l:'all',q:'',done:new Set(),pt:'A'};
 const $=id=>document.getElementById(id);
 const cssv=k=>`var(--${k})`;
 
-// 3. ระบบ AI (เชื่อมผ่าน Gemini API เพื่อทำงานจริงบน GitHub Pages)
+// 3. ระบบ AI (เชื่อมผ่าน Gemini API)
 let GEMINI_KEY = localStorage.getItem('udk_gemini_key') || '';
 if(fbDb){
   fbDb.ref('udk/config/geminiKey').on('value', s => {
@@ -415,7 +434,9 @@ async function callGeminiJSON(promptText) {
   return JSON.parse(txt);
 }
 
-function vis(){return P.filter(x=>(S.f==='all'||x.f===S.f)&&(S.p==='all'||x.p.includes(S.p))&&(S.w==='all'||x.w==S.w)&&(!S.q||(x.t+x.h).includes(S.q)))}
+function vis(){
+  return P.filter(x=>(S.f==='all'||x.f===S.f)&&(S.p==='all'||x.p.includes(S.p))&&(S.w==='all'||x.w==S.w)&&(S.l==='all'||(S.l==='yes'&&x.url)||(S.l==='no'&&!x.url))&&(!S.q||(x.t+x.h).includes(S.q)));
+}
 function chips(id,items,key){
   const el=$(id);
   items.forEach(([v,l])=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=l;b.dataset.v=v;
@@ -423,11 +444,12 @@ function chips(id,items,key){
 }
 function mark(id,key){$(id).querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===String(S[key]))))}
 function render(){
-  mark('fF','f');mark('fP','p');
+  mark('fF','f');mark('fP','p');mark('fL','l');
   const v=vis();
   const c=k=>v.filter(x=>x.f===k).length;
   const done=v.filter(x=>S.done.has(x.n)).length;
-  $('kpis').innerHTML=[[v.length,'Posts shown (of '+P.length+')'],[c('aw'),'Awareness'],[c('co'),'Consideration'],[c('cv'),'Conversion'],[done+'/'+v.length,'Completed']]
+  const linked=v.filter(x=>x.url).length;
+  $('kpis').innerHTML=[[v.length,'Posts shown (of '+P.length+')'],[c('aw'),'Awareness'],[c('co'),'Consideration'],[c('cv'),'Conversion'],[done+'/'+v.length,'Completed'],[linked+'/'+v.length,'มีลิงก์โพสต์จริงแล้ว']]
     .map(k=>`<div class="card kpi"><b>${k[0]}</b><span>${k[1]}</span></div>`).join('');
   const mx=Math.max(1,c('aw'),c('co'),c('cv'));
   const w=n=>n?Math.round(40+60*n/mx):0;
@@ -435,13 +457,28 @@ function render(){
   $('pbars').innerHTML=['A','B','C'].map((k,i)=>{const n=v.filter(x=>x.p.includes(k)).length+C.cu.filter(c=>c.type==='p'&&c.p&&c.p.includes(k)).length;
     return `<div class="bar"><span class="lb">${PE[k].name.split(':')[0]==k?'Persona '+k:k}</span><span class="tr"><span class="fl" style="display:block;width:${Math.min(100,n/Math.max(1,v.length)*100)}%;background:${cssv(['aw','co','cv'][i])}"></span></span><span class="n">${n}</span></div>`}).join('');
   $('prog').style.width=(v.length?done/v.length*100:0)+'%';
-  $('prog-t').textContent=`ความคืบหน้าการผลิต: ${done} จาก ${v.length} โพสต์ (ติ๊กช่องหน้าโพสต์เมื่อทำเสร็จ)`;
-  $('list').innerHTML=v.length?v.map(x=>`<details class="post${S.done.has(x.n)?' done':''}" data-n="${x.n}"${OPN.has(x.n)?' open':''}><summary>
+  $('prog-t').textContent=`ความคืบหน้าการผลิต: ${done} จาก ${v.length} โพสต์ · แปะลิงก์ติดตามโพสต์แล้ว ${linked} รายการ`;
+  $('list').innerHTML=v.length?v.map(x=>{
+    const m = C.met[x.n] || {};
+    const hasMet = m.rc || m.vw || m.en || m.rg;
+    return `<details class="post${S.done.has(x.n)?' done':''}" data-n="${x.n}"${OPN.has(x.n)?' open':''}><summary>
     <input type="checkbox" data-n="${x.n}" ${S.done.has(x.n)?'checked':''} aria-label="ทำเสร็จแล้ว โพสต์ที่ ${x.n}">
-    <span class="tag">${x.d}</span><span class="tag">${STG[x.s||0]}</span>${pjO(x.pj)?`<span class="tag"><span style="color:${pjO(x.pj).c}" aria-hidden="true">●</span> ${esc(pjO(x.pj).n)}</span>`:''}${x.o?`<span class="tag">Owner: ${esc(x.o)}</span>`:''}${x.k==='ev'?'<span class="tag">จากอีเวนต์</span>':''}${x.k==='opt'?'<span class="tag">เสริม ตัดได้</span>':''}<span class="tag t-${x.f}">${ST[x.f]}</span>
+    <span class="tag">${x.d}</span><span class="tag">${STG[x.s||0]}</span>${pjO(x.pj)?`<span class="tag"><span style="color:${pjO(x.pj).c}" aria-hidden="true">●</span> ${esc(pjO(x.pj).n)}</span>`:''}${x.o?`<span class="tag">Owner: ${esc(x.o)}</span>`:''}
+    ${x.url?`<a href="${esc(x.url)}" target="_blank" rel="noopener" class="tag keep" style="background:var(--cv);color:#fff;border-color:var(--cv)" onclick="event.stopPropagation()">🔗 เปิดดูโพสต์จริง</a>`:'<span class="tag" style="color:var(--muted)">ยังไม่มีลิงก์</span>'}
+    ${hasMet?`<span class="tag" style="color:var(--aw)">📊 Reach: ${m.rc||0} | สมัคร: ${m.rg||0}</span>`:''}
+    <span class="tag t-${x.f}">${ST[x.f]}</span>
     ${x.p.map(p=>`<span class="tag pp">Persona ${p}</span>`).join('')}
     <span class="tt">โพสต์ที่ ${x.n}: ${x.t}</span></summary>
-    <div class="body"><div><b>ฮุก:</b> ${x.h}</div><div><b>รูปแบบสื่อ:</b> ${x.m}</div><div><b>เป้าหมาย:</b> ${x.g}</div><div><b>ผู้รับผิดชอบ:</b> ${ownSel('data-po="'+x.n+'"',x.o)} <b>สถานะ:</b> ${stSel(x)} <b>โปรเจกต์:</b> ${pjSel('data-pr="'+x.n+'"',x.pj)}</div></div></details>`).join('')
+    <div class="body">
+      <div><b>ฮุก:</b> ${x.h||'-'}</div>
+      <div><b>รูปแบบสื่อ:</b> ${x.m||'-'} · <b>เป้าหมาย:</b> ${x.g||'-'}</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px">
+        <b>🔗 ลิงก์ติดตามโพสต์ (FB/IG/TikTok):</b>
+        <input type="url" data-purl="${x.n}" value="${esc(x.url||'')}" placeholder="วาง URL โพสต์ที่เผยแพร่แล้ว..." style="flex:1;min-width:220px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg)">
+        ${x.url?`<a href="${esc(x.url)}" target="_blank" rel="noopener" class="btn keep" style="padding:4px 10px;font-size:13px">เปิดลิงก์ ↗</a>`:''}
+      </div>
+      <div style="margin-top:4px"><b>ผู้รับผิดชอบ:</b> ${ownSel('data-po="'+x.n+'"',x.o)} <b>สถานะ:</b> ${stSel(x)} <b>โปรเจกต์:</b> ${pjSel('data-pr="'+x.n+'"',x.pj)}</div>
+    </div></details>`}).join('')
     :'<div class="empty">ยังไม่มีโพสต์ที่ตรงกับตัวกรอง กดวันที่ในปฏิทินเพื่อเพิ่มโพสต์ใหม่</div>';
   $('list').querySelectorAll('input[type=checkbox]').forEach(cb=>{
     cb.onclick=e=>e.stopPropagation();
@@ -502,7 +539,7 @@ function os(){
 const ISO=['2026-10-09','2026-10-12','2026-10-13','2026-10-14','2026-10-15','2026-10-17','2026-10-19','2026-10-20','2026-10-22','2026-10-26','2026-10-28','2026-10-29','2026-10-31','2026-11-02','2026-11-03','2026-11-05'];
 const WD=['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],SC={aw:'Aw',co:'Cs',cv:'Cv'};
 const C={m:[2026,9],sel:null,show:{p:1,t:1,e:1},cu:[],ox:{},xs:[],tm:[...DEFAULT_TEAM],met:{},pj:[],lg:[],rq:[],hp:new Set(),hs:[],hi:{}};
-P.forEach((x,i)=>{x.iso=ISO[i];x.o='';x.s=0});
+P.forEach((x,i)=>{x.iso=ISO[i];x.o='';x.s=0;x.url=''});
 const mk=(y,m,d)=>{const t=new Date(y,m,d);return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0')};
 const wdl=i=>WD[new Date(i+'T00:00:00').getDay()]+' '+thd(i);
 const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -515,11 +552,14 @@ function ensureDefaultTeam(){
   DEFAULT_TEAM.forEach(dt => {
     const ex = C.tm.find(m => m.n === dt.n);
     if(!ex) C.tm.push({...dt});
-    else { if(!ex.r) ex.r = dt.r; if(!ex.p) ex.p = dt.p; }
+    else {
+      if(!ex.r || ex.r.includes('ผู้บริหาร')) ex.r = dt.r;
+      if(!ex.p) ex.p = dt.p;
+    }
   });
 }
 
-function snap(){return {plan:{posts:P.map(x=>({n:x.n,t:x.t,h:x.h,m:x.m,g:x.g,f:x.f,p:x.p,iso:x.iso,o:x.o||'',s:x.s||0,k:x.k||'',pj:x.pj||''}))},tasks:{x:TK},items:{cu:C.cu.map(c=>{const r={...c};delete r.busy;return r}),ev:EV},check:{ox:C.ox,xs:C.xs,od:[...S.od],hs:C.hs,hi:C.hi},done:{dn:[...S.done],td:[...S.td]},team:{m:C.tm},metrics:{m:C.met},projects:{m:C.pj},log:{m:C.lg}}}
+function snap(){return {plan:{posts:P.map(x=>({n:x.n,t:x.t,h:x.h,m:x.m,g:x.g,f:x.f,p:x.p,iso:x.iso,o:x.o||'',s:x.s||0,k:x.k||'',pj:x.pj||'',url:x.url||''}))},tasks:{x:TK},items:{cu:C.cu.map(c=>{const r={...c};delete r.busy;return r}),ev:EV},check:{ox:C.ox,xs:C.xs,od:[...S.od],hs:C.hs,hi:C.hi},done:{dn:[...S.done],td:[...S.td]},team:{m:C.tm},metrics:{m:C.met},projects:{m:C.pj},log:{m:C.lg}}}
 function apply(k,j){
   if(k==='plan'){if(j.posts){P.length=0;j.posts.forEach(x=>{P.push(x);setP(x,x.iso||null)})}}
   else if(k==='tasks'){TK.length=0;(j.x||[]).forEach(t=>TK.push(t))}
@@ -613,7 +653,7 @@ function lab(i){const x=i.x;return i.k==='p'?`#${x.n} ${x.t}`:i.k==='t'?'งา�
 function pill(i){const x=i.x,pj=pjO(i.k==='t'?x[4]:i.k==='e'?x[2]:x.pj),tt=lab(i).replace(/"/g,'')+(pj?' ['+pj.n.replace(/"/g,'')+']':''),
   sy=pj&&i.k!=='e'?` style="background:color-mix(in srgb,${pj.c} 26%,var(--bg))"`:'',dot=pj?`<span style="color:${pj.c}" aria-hidden="true">● </span>`:'',
   a=`role="button" tabindex="0" title="${tt}"${sy} data-k="${i.k}" data-id="${i.id}"`;
-  if(i.k==='p')return `<div class="pill p-${x.f}${S.done.has(x.n)?' fin':''}" draggable="true" ${a}>${dot}<b>#${x.n}</b><span class="pt"> ${SC[x.f]} ${x.t}</span></div>`;
+  if(i.k==='p')return `<div class="pill p-${x.f}${S.done.has(x.n)?' fin':''}" draggable="true" ${a}>${dot}<b>#${x.n}${x.url?'🔗':''}</b><span class="pt"> ${SC[x.f]} ${x.t}</span></div>`;
   if(i.k==='t')return `<div class="pill tk${S.td.has(i.id)?' fin':''}" draggable="true" ${a}>${dot}<b>งาน</b><span class="pt"> ${x[1]}</span></div>`;
   if(i.k==='c')return `<div class="pill ${x.type==='p'?'p-'+x.f:'tk'}" draggable="true" ${a}><b>${x.type==='p'?'โพสต์'+(x.p?' '+x.p.join(''):''):'งาน'}</b><span class="pt"> ${esc(x.t)}</span></div>`;
   return `<div class="pill ev" ${a}>${dot}<b>อีเวนต์</b><span class="pt"> ${x[1]}</span></div>`}
@@ -633,13 +673,15 @@ function ca(){
   det();al();tm();pjLeg();pjm()}
 function det(){
   const s=C.sel,el=$('cdet');
-  if(!s){el.innerHTML='<p class="note" style="margin:0">กดวันที่หรือรายการในปฏิทินเพื่อดูรายละเอียดและวางตาราง</p>';return}
+  if(!s){el.innerHTML='<p class="note" style="margin:0">กดวันที่หรือรายการในปฏิทินเพื่อดูรายละเอียด วางลิงก์ติดตามโพสต์ และวางตาราง</p>';return}
   if(s.k==='day'){const its=items(s.d);
     el.innerHTML=`<h3 style="margin:0 0 6px">${wdl(s.d)}</h3>`+(its.length?its.map(i=>`<div style="margin:3px 0"><button type="button" class="chip" data-k="${i.k}" data-id="${i.id}">${lab(i)}</button></div>`).join(''):'<p class="note">ยังไม่มีรายการในวันนี้</p>')+`<div class="row"><b>เพิ่มรายการ</b><select id="aT" aria-label="ประเภท"><option value="p">โพสต์</option><option value="t">งาน</option><option value="e">อีเวนต์</option></select><select id="aF" aria-label="ช่วง Funnel"><option value="aw">Awareness</option><option value="co">Consideration</option><option value="cv">Conversion</option></select><select id="aPJ" aria-label="โปรเจกต์"><option value="">ไม่มีโปรเจกต์</option>${C.pj.map(p=>`<option value="${p.id}">${esc(p.n)}</option>`).join('')}</select><input type="text" id="aN" placeholder="ชื่อโพสต์หรืองาน" aria-label="ชื่อรายการ"><label><input type="checkbox" id="aA" checked> AI วิเคราะห์ Persona</label><button type="button" class="btn" id="aB">เพิ่ม</button></div>`;
     $('aB').onclick=()=>{const n=$('aN').value.trim();if(!n){$('aN').focus();return}if(!perm('edit')){deny();return}const tp=$('aT').value,wa=$('aA').checked,fv=$('aF').value,pv=$('aPJ').value;if(tp==='p'){const x=newPost(n,s.d,fv);x.pj=pv;x.o=ME.name||'';C.sel={k:'p',id:x.n};ch();if(wa)aiPost(x.n)}else if(tp==='t'){TK.push([s.d,esc(n),ME.name||'',0,pv]);logA('เพิ่มงาน "'+n+'"');ch()}else{EV.push([s.d,esc(n),pv]);logA('เพิ่มอีเวนต์ "'+n+'"');ch()}};return}
   let h='',dt='',isoV='',dn=false,fn=null;
   if(s.k==='p'){const x=P.find(q=>q.n==s.id);if(!x){C.sel=null;det();return}isoV=x.iso||'';dn=S.done.has(x.n);
-    h=`<h3 style="margin:0 0 6px">#${x.n} ${x.t}</h3><div class="row"><span class="tag t-${x.f}">${ST[x.f]}</span>${x.p.map(p=>`<span class="tag pp">Persona ${p}</span>`).join('')}${x.k==='ev'?'<span class="tag">จากอีเวนต์</span>':''}${x.k==='opt'?'<span class="tag">เสริม ตัดได้</span>':''}</div><div><b>ฮุก:</b> ${x.h}</div><div><b>รูปแบบสื่อ:</b> ${x.m}</div><div><b>เป้าหมาย:</b> ${x.g}</div><div class="row"><label>ผู้รับผิดชอบ ${ownSel('data-po="'+x.n+'"',x.o)}</label><label>สถานะ ${stSel(x)}</label><label>โปรเจกต์ ${pjSel('data-pr="'+x.n+'"',x.pj)}</label></div>${x.busy?'<div class="note">กำลังให้ AI วิเคราะห์ Persona...</div>':''}<details style="margin-top:6px"><summary>แก้ไขรายละเอียด / ลบโพสต์</summary><div class="row"><input type="text" id="eT" value="${x.t}" aria-label="ชื่อโพสต์"></div><div class="row"><input type="text" id="eH" value="${x.h}" placeholder="ฮุก" aria-label="ฮุก"><input type="text" id="eM" value="${x.m}" placeholder="รูปแบบสื่อ" aria-label="รูปแบบสื่อ"><input type="text" id="eG" value="${x.g}" placeholder="เป้าหมาย" aria-label="เป้าหมาย"></div><div class="row"><select id="eF" aria-label="Funnel">${['aw','co','cv'].map(k=>`<option value="${k}"${x.f===k?' selected':''}>${ST[k]}</option>`).join('')}</select>${['A','B','C'].map(k=>`<label><input type="checkbox" class="ep" value="${k}"${x.p.includes(k)?' checked':''}> ${k}</label>`).join('')}<button type="button" class="btn" id="eB">บันทึก</button><button type="button" class="btn" id="dA2">✨ AI วิเคราะห์ Persona</button><button type="button" class="btn" id="eX">ลบโพสต์</button></div></details>`;
+    h=`<h3 style="margin:0 0 6px">#${x.n} ${x.t}</h3><div class="row"><span class="tag t-${x.f}">${ST[x.f]}</span>${x.p.map(p=>`<span class="tag pp">Persona ${p}</span>`).join('')}${x.url?`<a href="${esc(x.url)}" target="_blank" rel="noopener" class="btn keep" style="padding:2px 8px;font-size:12px;background:var(--cv);color:#fff">🔗 เปิดดูโพสต์จริง</a>`:''}</div><div><b>ฮุก:</b> ${x.h||'-'}</div><div><b>รูปแบบสื่อ:</b> ${x.m||'-'}</div><div><b>เป้าหมาย:</b> ${x.g||'-'}</div>
+    <div class="row"><label style="flex:1;display:flex;gap:6px;align-items:center"><b>🔗 ลิงก์โพสต์:</b> <input type="url" data-purl="${x.n}" value="${esc(x.url||'')}" placeholder="https://www.facebook.com/... หรือ TikTok URL" style="flex:1"></label></div>
+    <div class="row"><label>ผู้รับผิดชอบ ${ownSel('data-po="'+x.n+'"',x.o)}</label><label>สถานะ ${stSel(x)}</label><label>โปรเจกต์ ${pjSel('data-pr="'+x.n+'"',x.pj)}</label></div>${x.busy?'<div class="note">กำลังให้ AI วิเคราะห์ Persona...</div>':''}<details style="margin-top:6px"><summary>แก้ไขรายละเอียด / ลบโพสต์</summary><div class="row"><input type="text" id="eT" value="${x.t}" aria-label="ชื่อโพสต์"></div><div class="row"><input type="text" id="eH" value="${x.h}" placeholder="ฮุก" aria-label="ฮุก"><input type="text" id="eM" value="${x.m}" placeholder="รูปแบบสื่อ" aria-label="รูปแบบสื่อ"><input type="text" id="eG" value="${x.g}" placeholder="เป้าหมาย" aria-label="เป้าหมาย"></div><div class="row"><select id="eF" aria-label="Funnel">${['aw','co','cv'].map(k=>`<option value="${k}"${x.f===k?' selected':''}>${ST[k]}</option>`).join('')}</select>${['A','B','C'].map(k=>`<label><input type="checkbox" class="ep" value="${k}"${x.p.includes(k)?' checked':''}> ${k}</label>`).join('')}<button type="button" class="btn" id="eB">บันทึก</button><button type="button" class="btn" id="dA2">✨ AI วิเคราะห์ Persona</button><button type="button" class="btn" id="eX">ลบโพสต์</button></div></details>`;
     fn=()=>{dn?S.done.delete(x.n):S.done.add(x.n)}}
   else if(s.k==='t'){const x=TK[+s.id];if(!x){C.sel=null;det();return}isoV=x[0];dn=S.td.has(+s.id);
     h=`<h3 style="margin:0 0 6px">งาน: ${x[1]}</h3><div><b>ผู้รับผิดชอบ:</b> ${ownSel('data-to="'+s.id+'"',x[2])}${x[3]?' <span class="tag t-co">ต้องขออนุมัติ</span>':''}</div>`+exInfo(x);fn=()=>tdSet(+s.id,!dn)}
@@ -720,6 +762,7 @@ function al(){
   const cn={};P.forEach(x=>x.iso&&(cn[x.iso]=(cn[x.iso]||0)+1));C.cu.forEach(c=>c.type==='p'&&c.d&&(cn[c.d]=(cn[c.d]||0)+1));
   Object.keys(cn).filter(k=>cn[k]>2).forEach(k=>add(1,`วันที่ ${thd(k)} มี ${cn[k]} โพสต์ ชนกันเกินไป`));
   const sp=P.filter(x=>x.iso);if(sp.length)[['aw',50],['co',30],['cv',20]].forEach(([k,g])=>{const f=sp.filter(x=>x.f===k).length/sp.length*100;if(Math.abs(f-g)>=10)add(2,`สัดส่วน ${ST[k]} ${Math.round(f)}% ต่างจากเป้า ${g}% เกิน 10 จุด`)});
+  P.forEach(x=>{if(x.iso&&dd(x.iso)<=-1&&S.done.has(x.n)&&!x.url)add(2,`โพสต์ #${x.n} โพสต์แล้วแต่ยังไม่ได้วางลิงก์ติดตามโพสต์ (ลูกปลา)`)});
   P.forEach(x=>{if(x.iso&&dd(x.iso)<=-2&&S.done.has(x.n)&&!(C.met[x.n]&&C.met[x.n].rc))add(2,`โพสต์ #${x.n} โพสต์แล้วแต่ยังไม่กรอกผลลัพธ์/ยอดสมัคร (เพียว/ลูกปลา)`)});
   A.sort((a,b)=>a[0]-b[0]);ALA=A;
   $('alL').innerHTML=A.length?A.map(a=>`<div class="task"><span class="tag" style="${a[0]===0?'color:var(--bad);font-weight:700':a[0]===1?'color:var(--co)':''}">${LV[a[0]]}</span><span class="tx">${esc(a[1])}</span></div>`).join(''):'<div class="empty">ไม่มีรายการเตือน Timeline ปกติดี</div>';
@@ -744,23 +787,135 @@ function tm(){
   $('tmT').innerHTML='<tr><th>ผู้รับผิดชอบ</th><th>โพสต์ค้าง</th><th>งานค้าง</th><th>เลยกำหนด</th></tr>'+(R.length?R.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]?'<b style="color:var(--bad)">'+r[3]+'</b>':0}</td></tr>`).join(''):'<tr><td colspan="4" class="note">ยังไม่มีงานที่มอบหมาย</td></tr>')
 }
 
+// 4. ตาราง Performance + ช่องลิงก์ติดตามโพสต์ + ตัวอ่านไฟล์ CSV
 const MF=[['rc','Reach (เพียว)'],['vw','Views (เพียว)'],['en','Engagement (เพียว)'],['ss','Share+Save'],['dm','ทักแชท (ลูกปลา)'],['rg','ยอดสมัคร (ลูกปลา)'],['cp','ดูจนจบ %']];
 function mrows(){const t=tdy(),all=$('mtAll')&&$('mtAll').checked;
-  return P.map(x=>({k:x.n,t:x.t,iso:x.iso,f:x.f,p:x.p,m:x.m,o:x.o})).concat(C.cu.filter(c=>c.type==='p').map(c=>({k:c.id,t:c.t,iso:c.d,f:c.f,p:c.p||[],m:'',o:c.o}))).filter(r=>all||(r.iso&&r.iso<=t))}
+  return P.map(x=>({k:x.n,t:x.t,iso:x.iso,f:x.f,p:x.p,m:x.m,o:x.o,url:x.url||''})).concat(C.cu.filter(c=>c.type==='p').map(c=>({k:c.id,t:c.t,iso:c.d,f:c.f,p:c.p||[],m:'',o:c.o,url:c.url||''}))).filter(r=>all||(r.iso&&r.iso<=t))}
 function mt(){const R=mrows(),m0=r=>C.met[r.k]||{};
-  $('mtT').innerHTML=R.length?'<tr><th>โพสต์</th>'+MF.map(f=>`<th>${f[1]}</th>`).join('')+'<th>ER</th><th>S+S</th></tr>'+R.map(r=>{const m=m0(r);return `<tr><td style="white-space:normal;min-width:180px">${typeof r.k==='number'?'#'+r.k:'ใหม่'} ${esc(r.t)}</td>`+MF.map(f=>`<td><input type="number" min="0" data-m="${r.k}" data-f="${f[0]}" value="${m[f[0]]===undefined?'':m[f[0]]}" aria-label="${f[1]}"></td>`).join('')+`<td id="er-${r.k}">${rate(m.en,m.rc)}</td><td id="ss-${r.k}">${rate(m.ss,m.rc)}</td></tr>`}).join(''):'<tr><td class="note">ยังไม่มีโพสต์ที่ถึงวันลง ติ๊ก "แสดงทุกโพสต์" เพื่อกรอกล่วงหน้า</td></tr>'}
+  $('mtT').innerHTML=R.length?'<tr><th>โพสต์</th><th>🔗 ลิงก์โพสต์จริง (ลูกปลา)</th>'+MF.map(f=>`<th>${f[1]}</th>`).join('')+'<th>ER</th><th>S+S</th></tr>'+R.map(r=>{const m=m0(r);return `<tr>
+    <td style="white-space:normal;min-width:170px"><b>${typeof r.k==='number'?'#'+r.k:'ใหม่'}</b> ${esc(r.t)} ${r.iso?`<div class="note">${thd(r.iso)}</div>`:''}</td>
+    <td><div style="display:flex;gap:4px;align-items:center"><input type="url" data-purl="${r.k}" value="${esc(r.url||'')}" placeholder="วางลิงก์..." aria-label="ลิงก์โพสต์">${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener" class="btn keep" style="padding:2px 6px;font-size:12px" title="เปิดดูโพสต์">↗</a>`:''}</div></td>`
+    +MF.map(f=>`<td><input type="number" min="0" data-m="${r.k}" data-f="${f[0]}" value="${m[f[0]]===undefined?'':m[f[0]]}" aria-label="${f[1]}"></td>`).join('')+`<td id="er-${r.k}">${rate(m.en,m.rc)}</td><td id="ss-${r.k}">${rate(m.ss,m.rc)}</td></tr>`}).join(''):'<tr><td class="note">ยังไม่มีโพสต์ที่ถึงวันลง ติ๊ก "แสดงทุกโพสต์" เพื่อกรอกล่วงหน้า หรืออัปโหลดไฟล์ CSV ด้านบน</td></tr>'}
 function mu(k){const m=C.met[k]||{},a=$('er-'+k),b=$('ss-'+k);if(a)a.textContent=rate(m.en,m.rc);if(b)b.textContent=rate(m.ss,m.rc)}
 function mtShow(){const r=MR||{},pb=r.by_persona||{};
-  $('mtR').innerHTML=`<div style="margin-top:10px"><b>สรุป:</b> ${e2(r.summary)}</div><div><b>ที่ได้ผล:</b>${ul2(r.wins)}</div><div><b>ที่ยังไม่ดี:</b>${ul2(r.issues)}</div><div><b>แยกตาม Persona:</b>${['A','B','C'].map(k=>`<div>Persona ${k}: ${e2(pb[k])}</div>`).join('')}</div><div><b>คำแนะนำปรับแอดและแผน (สำหรับเพียว/ลูกตาล):</b>${Array.isArray(r.adjustments)&&r.adjustments.length?'<ul style="margin:4px 0">'+r.adjustments.map(a=>`<li>${e2(a.action)} <span class="note">(${e2(a.reason)}${a.when?' · '+e2(a.when):''})</span></li>`).join('')+'</ul>':'<span class="note"> ไม่มี</span>'}</div><div><b>โพสต์ที่แนะนำเพิ่ม:</b>${Array.isArray(r.next_posts)&&r.next_posts.length?r.next_posts.map((n,i)=>`<div class="task"><span class="tx">${e2(n.title)} <span class="tag pp">Persona ${e2(n.persona)}</span> <span class="note">${e2(n.why)}</span></span><button type="button" class="btn" data-np="${i}">เพิ่มลงปฏิทิน (พรุ่งนี้)</button></div>`).join(''):'<span class="note"> ไม่มี</span>'}</div>`}
+  $('mtR').innerHTML=`<div style="margin-top:10px"><b>สรุปผลลัพธ์จากตารางและไฟล์ CSV:</b> ${e2(r.summary)}</div><div><b>สิ่งที่ทำได้ดี (Wins):</b>${ul2(r.wins)}</div><div><b>จุดที่ควรปรับปรุง (Issues):</b>${ul2(r.issues)}</div><div><b>แยกตาม Persona:</b>${['A','B','C'].map(k=>`<div>Persona ${k}: ${e2(pb[k])}</div>`).join('')}</div><div><b>คำแนะนำปรับแอดและคอนเทนต์ (สำหรับเพียว/ลูกตาล):</b>${Array.isArray(r.adjustments)&&r.adjustments.length?'<ul style="margin:4px 0">'+r.adjustments.map(a=>`<li>${e2(a.action)} <span class="note">(${e2(a.reason)}${a.when?' · '+e2(a.when):''})</span></li>`).join('')+'</ul>':'<span class="note"> ไม่มี</span>'}</div><div><b>โพสต์ที่แนะนำให้ทำเพิ่ม:</b>${Array.isArray(r.next_posts)&&r.next_posts.length?r.next_posts.map((n,i)=>`<div class="task"><span class="tx">${e2(n.title)} <span class="tag pp">Persona ${e2(n.persona)}</span> <span class="note">${e2(n.why)}</span></span><button type="button" class="btn" data-np="${i}">เพิ่มลงปฏิทิน (พรุ่งนี้)</button></div>`).join(''):'<span class="note"> ไม่มี</span>'}</div>`}
+
+// ฟังก์ชันแปลงไฟล์ CSV และจับคู่ข้อมูลเข้ากับโพสต์อัตโนมัติ
+function parseCSVText(text) {
+  const rows = [];
+  let row = [], cur = '', inQuotes = false;
+  for(let i=0; i<text.length; i++){
+    const ch = text[i], nx = text[i+1];
+    if(inQuotes){
+      if(ch === '"' && nx === '"'){ cur += '"'; i++; }
+      else if(ch === '"') inQuotes = false;
+      else cur += ch;
+    } else {
+      if(ch === '"') inQuotes = true;
+      else if(ch === ','){ row.push(cur.trim()); cur = ''; }
+      else if(ch === '\n' || ch === '\r'){
+        if(ch === '\r' && nx === '\n') i++;
+        row.push(cur.trim());
+        if(row.some(cell => cell !== '')) rows.push(row);
+        row = []; cur = '';
+      } else cur += ch;
+    }
+  }
+  if(cur || row.length){ row.push(cur.trim()); if(row.some(cell => cell !== '')) rows.push(row); }
+  return rows;
+}
+
+$('csvFile').onchange = e => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const raw = ev.target.result || '';
+    const rows = parseCSVText(raw);
+    if(rows.length < 2){ toast('ไฟล์ CSV ไม่มีข้อมูลหรือรูปแบบไม่ถูกต้อง'); return; }
+    const headers = rows[0].map(h => h.toLowerCase());
+    const dataRows = rows.slice(1);
+
+    // ค้นหาคอลัมน์สำคัญอัตโนมัติ (รองรับทั้งภาษาไทยและอังกฤษจาก Meta / TikTok)
+    const findCol = kwList => headers.findIndex(h => kwList.some(k => h.includes(k)));
+    const idxTitle = findCol(['title', 'description', 'post', 'ad name', 'campaign', 'ชื่อ', 'ข้อความ', 'หัวข้อ', 'แคปชัน']);
+    const idxDate  = findCol(['date', 'publish', 'time', 'วันที่', 'เวลา']);
+    const idxReach = findCol(['reach', 'การเข้าถึง']);
+    const idxViews = findCol(['view', 'impressions', 'play', 'การรับชม', 'ยอดวิว', 'อิมเพรสชัน']);
+    const idxEng   = findCol(['engagement', 'interaction', 'reaction', 'การมีส่วนร่วม', 'ถูกใจ']);
+    const idxShare = findCol(['share', 'save', 'แชร์', 'บันทึก']);
+    const idxMsg   = findCol(['message', 'messaging', 'conversation', 'dm', 'ข้อความ', 'ทัก']);
+    const idxLead  = findCol(['lead', 'purchase', 'registration', 'conversion', 'result', 'สมัคร', 'ผลลัพธ์', 'จอง']);
+    const idxLink  = findCol(['permalink', 'link', 'url', 'ลิงก์']);
+
+    let matchedCount = 0;
+    const toNum = val => { const n = parseFloat(String(val||'').replace(/,/g,'')); return isNaN(n) ? 0 : n; };
+
+    dataRows.forEach(r => {
+      const titleVal = idxTitle >= 0 ? (r[idxTitle] || '') : '';
+      const dateRaw  = idxDate >= 0 ? (r[idxDate] || '') : '';
+      let isoMatch = '';
+      const dm = /(\d{4})[-/](\d{1,2})[-/](\d{1,2})/.exec(dateRaw) || /(\d{1,2})[-/](\d{1,2})[-/](\d{4})/.exec(dateRaw);
+      if(dm){
+        isoMatch = dm[1].length===4 ? `${dm[1]}-${dm[2].padStart(2,'0')}-${dm[3].padStart(2,'0')}` : `${dm[3]}-${dm[2].padStart(2,'0')}-${dm[1].padStart(2,'0')}`;
+      }
+      // พยายามจับคู่กับโพสต์ในระบบ
+      let targetPost = P.find(p => (titleVal && p.t && (titleVal.includes(p.t) || p.t.includes(titleVal.slice(0,20)))) || (isoMatch && p.iso === isoMatch));
+      if(targetPost){
+        const m = C.met[targetPost.n] = C.met[targetPost.n] || {};
+        if(idxReach >= 0 && toNum(r[idxReach])) m.rc = toNum(r[idxReach]);
+        if(idxViews >= 0 && toNum(r[idxViews])) m.vw = toNum(r[idxViews]);
+        if(idxEng >= 0   && toNum(r[idxEng]))   m.en = toNum(r[idxEng]);
+        if(idxShare >= 0 && toNum(r[idxShare])) m.ss = toNum(r[idxShare]);
+        if(idxMsg >= 0   && toNum(r[idxMsg]))   m.dm = toNum(r[idxMsg]);
+        if(idxLead >= 0  && toNum(r[idxLead]))  m.rg = toNum(r[idxLead]);
+        if(idxLink >= 0  && r[idxLink] && r[idxLink].startsWith('http')) targetPost.url = r[idxLink];
+        matchedCount++;
+      }
+    });
+
+    // แสดงตารางพรีวิว CSV สูงสุด 8 แถวแรก
+    const previewCols = rows[0].slice(0, 7);
+    let tbl = `<div class="note" style="margin-bottom:6px;color:var(--cv);font-weight:600">✅ อ่านไฟล์ "${esc(file.name)}" สำเร็จ (${dataRows.length} แถว) · จับคู่เข้ากับโพสต์ในแดชบอร์ดอัตโนมัติ ${matchedCount} รายการ</div>`;
+    tbl += `<div class="scroll"><table style="font-size:12px"><tr>${previewCols.map(c=>`<th>${esc(c)}</th>`).join('')}</tr>`;
+    dataRows.slice(0, 8).forEach(r => {
+      tbl += `<tr>${previewCols.map((_,i)=>`<td>${esc((r[i]||'').slice(0,50))}</td>`).join('')}</tr>`;
+    });
+    tbl += `</table></div>`;
+    $('csvSummary').innerHTML = tbl;
+
+    // ใส่ข้อมูล CSV ลงในกล่องวิเคราะห์ AI
+    $('mtP').value = `[ข้อมูลจากไฟล์ CSV: ${file.name}]\n` + rows.slice(0, 40).map(r => r.join(' | ')).join('\n');
+    logA(`อัปโหลดไฟล์ CSV "${file.name}" (${dataRows.length} แถว)`);
+    ch();
+    toast(`นำเข้า CSV สำเร็จ (${dataRows.length} แถว) กดปุ่ม Analyze results เพื่อให้ AI วิเคราะห์ได้เลย`);
+  };
+  reader.readAsText(file);
+};
+
+$('csvClearBtn').onclick = () => {
+  $('csvFile').value = '';
+  $('csvSummary').innerHTML = '';
+  $('mtP').value = '';
+  toast('ล้างข้อมูล CSV เรียบร้อยแล้ว');
+};
 
 document.addEventListener('change',e=>{const t=e.target,d=t.dataset||{},no=()=>{deny();refresh()};
   if(d.po!==undefined){const x=P.find(q=>q.n==d.po);if(!x)return;if(!perm('edit'))return no();x.o=t.value;logA('มอบหมายโพสต์ #'+x.n+' ให้ '+(t.value||'ไม่ระบุ'));ch()}
   else if(d.ps!==undefined){const x=P.find(q=>q.n==d.ps);if(!x)return;if(!perm('status',x))return no();const o=x.s||0;x.s=+t.value;if(x.s===4)S.done.add(x.n);else if(o===4)S.done.delete(x.n);logA('เปลี่ยนสถานะโพสต์ #'+x.n+' เป็น '+STG[x.s]);ch()}
+  else if(d.purl!==undefined){
+    const x=P.find(q=>String(q.n)===d.purl) || C.cu.find(q=>String(q.id)===d.purl);
+    if(!x)return;if(!perm('status',x)&&!perm('edit'))return no();
+    x.url = t.value.trim();
+    if(x.url && x.n){ x.s = 4; S.done.add(x.n); }
+    logA('อัปเดตลิงก์โพสต์ #'+(x.n||x.id));
+    ch();
+  }
   else if(d.to!==undefined){const k=TK[+d.to];if(!k)return;if(!perm('edit'))return no();k[2]=t.value;logA('มอบหมายงาน "'+k[1]+'" ให้ '+(t.value||'ไม่ระบุ'));ch()}
   else if(d.co!==undefined){const c=C.cu.find(q=>q.id===d.co);if(!c)return;if(!perm('edit'))return no();c.o=t.value;ch()}
   else if(d.pr!==undefined){const x=P.find(q=>q.n==d.pr);if(!x)return;if(!perm('edit'))return no();x.pj=t.value;logA('ย้ายโพสต์ #'+x.n+' ไปโปรเจกต์ '+((pjO(t.value)||{}).n||'ไม่มี'));ch()}
   else if(d.tp!==undefined){const k=TK[+d.tp];if(!k)return;if(!perm('edit'))return no();k[4]=t.value;ch()}
-  else if(d.m!==undefined){const x=P.find(q=>String(q.n)===d.m);if(!perm('metric',x))return no();(C.met[d.m]=C.met[d.m]||{})[d.f]=t.value===''?'':+t.value;logA('อัปเดตตัวเลขโพสต์ #'+d.m+' ('+d.f+')');sv();mu(d.m)}
+  else if(d.m!==undefined){const x=P.find(q=>String(q.n)===d.m);if(!perm('metric',x))return no();(C.met[d.m]=C.met[d.m]||{})[d.f]=t.value===''?'':+t.value;logA('อัปเดตตัวเลขโพสต์ #'+d.m+' ('+d.f+')');sv();mu(d.m);render()}
   else if(d.mr!==undefined){if(!ME.host)return no();const m=C.tm[+d.mr];if(m){m.p=t.value;logA('เปลี่ยนสิทธิ์ของ '+m.n+' เป็น '+RLB[m.p]);ch()}}
   else if(d.me!==undefined){if(!ME.host)return no();const m=C.tm[+d.me];if(m){m.email=t.value.trim().toLowerCase();logA('ผูกอีเมลของ '+m.n+' เป็น '+m.email);meUpdate();ch()}}
   else if(t.id==='mtAll')mt()});
@@ -779,23 +934,22 @@ document.addEventListener('toggle',e=>{const t=e.target;if(t.matches&&t.matches(
   $('mtR').onclick=e=>{const b=e.target.closest('[data-np]');if(!b||!MR)return;if(!perm('edit')){deny();return}const n=MR.next_posts[+b.dataset.np],nd=new Date(),d=mk(nd.getFullYear(),nd.getMonth(),nd.getDate()+1),pr=['A','B','C'].includes(n.persona)?[n.persona]:[];
     const x=newPost(String(n.title||'โพสต์ใหม่').slice(0,80),d,n.funnel);x.p=pr;x.o='ลูกตาล';x.g=esc(String(n.why||'').slice(0,160));C.m=[+d.slice(0,4),+d.slice(5,7)-1];C.sel={k:'p',id:x.n};ch()};
   $('mtB').onclick=async()=>{const R=mrows().filter(r=>{const m=C.met[r.k];return m&&(m.rc||m.vw||m.en||m.dm||m.rg)}),px=$('mtP').value.trim();
-    if(!R.length&&!px){$('mtS').textContent='กรอกตัวเลขอย่างน้อย 1 โพสต์ หรือวางข้อมูลที่ส่งออกก่อน';return}
-    $('mtB').disabled=true;$('mtS').textContent='กำลังให้ Gemini วิเคราะห์ผล...';
-    try{const data=R.map(r=>({id:r.k,title:r.t,date:r.iso,funnel:r.f,persona:r.p,platform:r.m,owner:r.o||null,metrics:C.met[r.k]}));
-      MR=await aiJson('คุณคือที่ปรึกษาการตลาดดิจิทัลของ Udomkati Brewing Academy สถาบันสอนต้มเบียร์ระดับมืออาชีพในไทย\n'+PERS+'\nเป้า Funnel 50% Awareness (ดู Reach, ดูจนจบ, แชร์/เซฟ), 30% Consideration (ดูจนจบ, ข้อความทัก), 20% Conversion (สมัคร/จอง)\nผลโพสต์ (JSON): '+JSON.stringify(data)+'\nข้อมูลเพิ่มเติม:\n<<<\n'+px.slice(0,6000)+'\n>>>\nวิเคราะห์ว่าอะไรได้ผลหรือไม่ได้ผลและเพราะอะไร เทียบตาม Persona, Funnel และรูปแบบสื่อ ตอบเป็น JSON เท่านั้น: {"summary":"..","wins":[".."],"issues":[".."],"by_persona":{"A":"..","B":"..","C":".."},"adjustments":[{"action":"..","reason":"..","when":".."}],"next_posts":[{"title":"..","persona":"A","funnel":"aw","why":".."}],"data_gaps":[".."]}');
+    if(!R.length&&!px){$('mtS').textContent='กรุณาอัปโหลดไฟล์ CSV หรือกรอกตัวเลขอย่างน้อย 1 โพสต์ก่อน';return}
+    $('mtB').disabled=true;$('mtS').textContent='กำลังให้ Gemini วิเคราะห์ข้อมูลและไฟล์ CSV...';
+    try{const data=R.map(r=>({id:r.k,title:r.t,date:r.iso,url:r.url||null,funnel:r.f,persona:r.p,platform:r.m,owner:r.o||null,metrics:C.met[r.k]}));
+      MR=await aiJson('คุณคือที่ปรึกษาการตลาดดิจิทัลของ Udomkati Brewing Academy สถาบันสอนต้มเบียร์ระดับมืออาชีพในไทย\n'+PERS+'\nเป้า Funnel 50% Awareness (ดู Reach, ดูจนจบ, แชร์/เซฟ), 30% Consideration (ดูจนจบ, ข้อความทัก), 20% Conversion (สมัคร/จอง)\nผลโพสต์ในแดชบอร์ด (JSON): '+JSON.stringify(data)+'\nข้อมูลจากไฟล์ CSV / แพลตฟอร์มโฆษณา:\n<<<\n'+px.slice(0,8000)+'\n>>>\nวิเคราะห์อย่างละเอียดว่าคอนเทนต์หรือแอดตัวไหนได้ผลดีที่สุด (Winning Content) ตัวไหนควรปรับปรุง และให้คำแนะนำเชิงปฏิบัติสำหรับลูกตาล (คนวางคอนเทนต์) และเพียว (คนยิงแอด) ตอบเป็น JSON เท่านั้น: {"summary":"..","wins":[".."],"issues":[".."],"by_persona":{"A":"..","B":"..","C":".."},"adjustments":[{"action":"..","reason":"..","when":".."}],"next_posts":[{"title":"..","persona":"A","funnel":"aw","why":".."}],"data_gaps":[".."]}');
       mtShow();$('mtS').textContent=''}catch(e){$('mtS').textContent=aerr(e)}
     $('mtB').disabled=false};
 })();
 
-function newPost(t,iso,f){logA('เพิ่มโพสต์ "'+String(t).slice(0,40)+'"');const n=P.reduce((m,x)=>Math.max(m,x.n),0)+1,x={n,t:esc(String(t)),h:'',m:'',g:'',f:fok(f)?f:'aw',p:[],o:ME.name||'ลูกตาล',s:0,k:''};P.push(x);setP(x,iso);return x}
+function newPost(t,iso,f){logA('เพิ่มโพสต์ "'+String(t).slice(0,40)+'"');const n=P.reduce((m,x)=>Math.max(m,x.n),0)+1,x={n,t:esc(String(t)),h:'',m:'',g:'',f:fok(f)?f:'aw',p:[],o:ME.name||'ลูกตาล',s:0,k:'',url:''};P.push(x);setP(x,iso);return x}
 async function aiPost(n){const x=P.find(q=>q.n===n);if(!x)return;x.busy=1;ca();
   try{const r=await aiRun(x.t+(x.h?'\n'+x.h:''));x.p=aiP(r);if(fok(r.funnel))x.f=r.funnel}catch(e){setSt(aerr(e))}
   x.busy=0;ch()}
 
-// 4. ระบบจัดการสิทธิ์และ Authentication ตามตำแหน่งงาน
 const ME={uid:null,email:'',pn:'',name:'',host:false,role:'viewer'};
 const RLB={
-  host:'Host (ดูภาพรวม / อนุมัติ / จัดการทุกอย่าง)',
+  host:'Host (ดูภาพรวม)',
   editor:'Editor (สร้าง/แก้ไขตารางคอนเทนต์ โพสต์ งาน และกรอกตัวเลขได้)',
   own:'Assignee (แก้เฉพาะงานที่ได้รับมอบหมาย)',
   viewer:'Viewer (ดูข้อมูลอย่างเดียว)'
@@ -815,7 +969,6 @@ function meUpdate(){
     $('userBadge').textContent = `👤 ${ME.name} (${matched.r.split('(')[0].trim()})`;
     document.body.classList.toggle('ro', ME.role==='viewer'||DBS.ro);
   } else {
-    // หากอีเมลนี้ยังไม่เคยผูกกับชื่อไหนเลย ให้เลือกชื่อจาก 5 ตำแหน่ง
     $('loginStep').style.display = 'none';
     $('claimStep').style.display = 'block';
     $('claimEmailTxt').textContent = `เข้าสู่ระบบด้วย: ${ME.email}`;
@@ -913,12 +1066,12 @@ function pjm(){
   $('pjF').hidden=!ME.host;
   const sg=C.pj.map(p=>p.id+p.n).join('|');if(sg!==PSIG){PSIG=sg;const o=C.pj.map(p=>`<option value="${p.id}">${esc(p.n)}</option>`).join('');$('tPJ').innerHTML='<option value="">ไม่มีโปรเจกต์</option>'+o;$('plP').innerHTML='<option value="">ไม่ผูกโปรเจกต์</option><option value="__new">สร้างโปรเจกต์ใหม่ตามชื่อแคมเปญ</option>'+o}}
 function mcells(){const y=C.m[0],m=C.m[1],len=new Date(y,m+1,0).getDate(),o=[];for(let d=1;d<=len;d++){const iso=mk(y,m,d);o.push([iso,items(iso)])}return o}
-function csvM(){const q=v=>'"'+un(v).replace(/"/g,'""')+'"',R=[['วันที่','ประเภท','ชื่อ','โปรเจกต์','Funnel','Persona','ผู้รับผิดชอบ','สถานะ','ฮุก']];
+function csvM(){const q=v=>'"'+un(v).replace(/"/g,'""')+'"',R=[['วันที่','ประเภท','ชื่อ','โปรเจกต์','Funnel','Persona','ผู้รับผิดชอบ','สถานะ','ฮุก','ลิงก์โพสต์']];
   mcells().forEach(([iso,its])=>its.forEach(i=>{const x=i.x,pj=pjO(i.k==='t'?x[4]:i.k==='e'?x[2]:x.pj),pn=pj?pj.n:'';
-    if(i.k==='p')R.push([iso,'โพสต์',x.t,pn,ST[x.f],x.p.join('/'),x.o||'',STG[x.s||0],x.h]);
-    else if(i.k==='t')R.push([iso,'งาน',x[1],pn,'','',x[2]||'',S.td.has(i.id)?'เสร็จ':'ยังไม่เสร็จ','']);
-    else if(i.k==='e')R.push([iso,'อีเวนต์',x[1],pn,'','','','','']);
-    else R.push([iso,'รายการเพิ่มเอง',x.t,'',x.type==='p'?ST[x.f]:'',(x.p||[]).join('/'),x.o||'','',''])}));
+    if(i.k==='p')R.push([iso,'โพสต์',x.t,pn,ST[x.f],x.p.join('/'),x.o||'',STG[x.s||0],x.h,x.url||'']);
+    else if(i.k==='t')R.push([iso,'งาน',x[1],pn,'','',x[2]||'',S.td.has(i.id)?'เสร็จ':'ยังไม่เสร็จ','','']);
+    else if(i.k==='e')R.push([iso,'อีเวนต์',x[1],pn,'','','','','','']);
+    else R.push([iso,'รายการเพิ่มเอง',x.t,'',x.type==='p'?ST[x.f]:'',(x.p||[]).join('/'),x.o||'','','',x.url||''])}));
   return '\ufeff'+R.map(r=>r.map(q).join(',')).join('\r\n')}
 function drawM(){const y=C.m[0],m=C.m[1],off=new Date(y,m,1).getDay(),len=new Date(y,m+1,0).getDate(),rows=Math.ceil((off+len)/7),W=1500,cw=W/7,rh=170,tp=110,H=tp+rows*rh+90,cv=document.createElement('canvas');cv.width=W;cv.height=H;
   const g=cv.getContext('2d'),F='"IBM Plex Sans Thai",system-ui,sans-serif',ms=mk(y,m,1).slice(0,7),FC={aw:'#2f6f8f',co:'#b8791f',cv:'#3f7d4e'};
@@ -953,7 +1106,7 @@ function plShow(){const r=PL||{},s0=$('plS').value,e0=$('plE').value,ok=d=>/^\d{
   $('plG').onclick=async()=>{if(!perm('edit')){deny();return}const b=$('plB').value.trim(),s0=$('plS').value,e0=$('plE').value;
     if(!b||!s0||!e0||e0<s0){$('plS2').textContent='กรอกโจทย์ วันเริ่ม และวันสิ้นสุดให้ครบ';return}
     $('plG').disabled=true;$('plS2').textContent='กำลังให้ Gemini วางแผนแคมเปญ...';
-    try{PL=await aiJson('คุณคือ Content Director ของ Udomkati Brewing Academy สถาบันสอนต้มเบียร์ระดับมืออาชีพในไทย\n'+PERS+'\nสมาชิกทีม: ลูกตาล (วางตารางคอนเทนต์/เขียนบทความ), ลูกปลา (Admin ลงโพสต์/ทำคลิป/อัปเดตยอดสมัคร), เพียว (ยิงแอด/วิเคราะห์ข้อมูล), แม็กและแมท (ผู้บริหาร/อนุมัติ)\nโจทย์/แคมเปญ:\n<<<\n'+b.slice(0,3000)+'\n>>>\nช่วงเวลา '+s0+' ถึง '+e0+' (รูปแบบ YYYY-MM-DD) โพสต์ประมาณ '+$('plN').value+' โพสต์ต่อสัปดาห์\nคิดไอเดียโพสต์ และงานผลิตที่ต้องทำก่อนวันโพสต์ 2-3 วัน โดยระบุ owner_role เป็นชื่อสมาชิกทีม (ลูกตาล, ลูกปลา, เพียว) ตอบเป็น JSON เท่านั้น: {"project_name":"..","ideas":[{"title":"..","hook":"..","media":"..","goal":"..","funnel":"aw","persona":"A","date":"YYYY-MM-DD"}],"tasks":[{"title":"..","date":"YYYY-MM-DD","owner_role":"ลูกตาล|ลูกปลา|เพียว","approval":false}],"notes":"สั้นๆ"}');
+    try{PL=await aiJson('คุณคือ Content Director ของ Udomkati Brewing Academy สถาบันสอนต้มเบียร์ระดับมืออาชีพในไทย\n'+PERS+'\nสมาชิกทีม: ลูกตาล (วางตารางคอนเทนต์/เขียนบทความ), ลูกปลา (Admin ลงโพสต์/ทำคลิป/อัปเดตยอดสมัคร), เพียว (ยิงแอด/วิเคราะห์ข้อมูล), แม็กและแมท (ดูภาพรวม)\nโจทย์/แคมเปญ:\n<<<\n'+b.slice(0,3000)+'\n>>>\nช่วงเวลา '+s0+' ถึง '+e0+' (รูปแบบ YYYY-MM-DD) โพสต์ประมาณ '+$('plN').value+' โพสต์ต่อสัปดาห์\nคิดไอเดียโพสต์ และงานผลิตที่ต้องทำก่อนวันโพสต์ 2-3 วัน โดยระบุ owner_role เป็นชื่อสมาชิกทีม (ลูกตาล, ลูกปลา, เพียว) ตอบเป็น JSON เท่านั้น: {"project_name":"..","ideas":[{"title":"..","hook":"..","media":"..","goal":"..","funnel":"aw","persona":"A","date":"YYYY-MM-DD"}],"tasks":[{"title":"..","date":"YYYY-MM-DD","owner_role":"ลูกตาล|ลูกปลา|เพียว","approval":false}],"notes":"สั้นๆ"}');
       plShow();$('plS2').textContent=''}catch(e){$('plS2').textContent=aerr(e)}
     $('plG').disabled=false};
 })();
@@ -1027,6 +1180,7 @@ function tplPrev(){const c=$('tpC').value,d0=$('tpD').value;
   document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{const t=$(b.dataset.go);if(t&&t.scrollIntoView)t.scrollIntoView({behavior:'smooth'})})})();
 chips('fF',[['all','ทั้งหมด'],['aw','Awareness'],['co','Consideration'],['cv','Conversion']],'f');
 chips('fP',[['all','ทั้งหมด'],['A','A'],['B','B'],['C','C']],'p');
+chips('fL',[['all','ทั้งหมด'],['yes','🔗 มีลิงก์แล้ว'],['no','ยังไม่มีลิงก์']],'l');
 
 $('q').oninput=e=>{S.q=e.target.value.trim();render()};
 ['sN','sA','sC'].forEach(i=>$(i).oninput=sim);
